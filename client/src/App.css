@@ -1,15 +1,29 @@
 body::-webkit-scrollbar {
-    width: 10px;
-  }
-  body::-webkit-scrollbar-track {
-    background-color: rgb(229, 213, 255);
-  }
-  body::-webkit-scrollbar-thumb {
-    background: rgb(109, 40, 219);
-  }
-.hero-section-bg-img{
-    background-image: url(./assets/banner-bg.jpg);
-    background-size: cover;
-    background-attachment: fixed;
-    background-blend-mode: lighten;
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background-color: rgb(229, 213, 255);
+}
+body::-webkit-scrollbar-thumb {
+  background: rgb(109, 40, 219);
+}
+.hero-section-bg-img ,.testimonial{
+  background-image: url(./assets/banner-bg.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-blend-mode: lighten;
+}
+
+.cart-badge{
+background-color: #ff0000;
+border-radius: 50%;
+width: 18px;
+font-size: 10px;
+color: white;
+aspect-ratio: 1/1;
+display: grid;
+place-content: center;
+position: absolute;
+top: -5px;
+margin-left: 11px;
 }
