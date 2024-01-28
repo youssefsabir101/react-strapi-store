@@ -1,0 +1,40 @@
++----------------+       +--------------+       +------------------+
+|    Product     | 1---* |   Category   | *---1 |    ProductCategory  |
++----------------+       +--------------+       +------------------+
+| id             |       | id           |       | id               |
+| Title          |       | title        |       | product_id       |
+| Desc           |       | title        |       +------------------+                       
+| category_id    |       | image        |
+| image          |       +--------------+       
+| price          |
+| oldPrice       |
+| isFeatured     |
+| image1         |
+| image2         |
+| image3         |
+| image4         |
+| categories     |
+| isNew          |
++----------------+
+
++----------------+       +------------+         +------------------+
+|    Users       | 1---* |  Addresses | *---1   |    UserAddress   |
++----------------+       +------------+         +------------------+
+| id             |       | id         |         | id               |
+| name           |       | user_id    |         | user_id          |
+| email          |       | street     |         | address_id       |
+| password       |       | city       |         | is_default       |
++----------------+       | country    |         +------------------+
+                         | zip_code   |
+                         +------------+
+
++----------------+       +--------------+
+|    Orders      | 1---* | OrderItems   |
++----------------+       +--------------+
+| id             |       | id           |
+| user_id        |       | order_id     |
+| total_amount   |       | product_id   |
+| status         |       | quantity     |
+| created_at     |       | price        |
++----------------+       +--------------+
+

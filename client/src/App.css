@@ -1,6 +1,7 @@
 body::-webkit-scrollbar {
   width: 10px;
 }
+
 body::-webkit-scrollbar-track {
   background-color: rgb(229, 213, 255);
 }
@@ -8,14 +9,25 @@ body::-webkit-scrollbar-thumb {
   background: rgb(109, 40, 219);
 }
 .hero-section-bg-img ,.testimonial{
-  background-image: url(./assets/banner-bg.jpg);
   background-size: cover;
   background-attachment: fixed;
-  background-blend-mode: lighten;
+  transition: background-image 0.5s ease-in-out;
+  animation: changeBackground 15s infinite;
 }
 
+/* Define the keyframes for background change */
+@keyframes changeBackground {
+  0% { background-image: url(./assets/background1.jpg); }
+  33.33% { background-image: url(./assets/background2.jpg); }
+  66.66% { background-image: url(./assets/background3.png); }
+  100% { background-image: url(./assets/background1.jpg); }
+
+}
+
+
+
 .cart-badge{
-background-color: #ff0000;
+background-color: rgb(237, 2, 2);
 border-radius: 50%;
 width: 18px;
 font-size: 10px;
@@ -27,3 +39,22 @@ position: absolute;
 top: -5px;
 margin-left: 11px;
 }
+
+
+
+.cartList::-webkit-scrollbar-track {
+  background-color: rgb(229, 213, 255);
+}
+.cartList::-webkit-scrollbar-thumb {
+  background: rgb(109, 40, 219);
+}
+
+
+
+
+
+
+
+
+
+

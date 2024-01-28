@@ -1,59 +1,103 @@
-import { useParams } from "react-router-dom"
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Navbar from "./navbar/Navbar"
-import Footer from "./Footer";
-import useFetch from "../hooks/useFetch";
-
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Navbar from './navbar/Navbar';
+import Footer from './staticPages/Footer';
+import useFetch from '../hooks/useFetch';
+import { addToCart } from './redux/cartReducer';
+import { useDispatch } from 'react-redux';
 
 function ProductDetails() {
   useEffect(() => {
-    document.title="Decory | Product Details";
-  },[]);
-  useEffect(() => {
+    document.title = 'SabDecor | Product Details';
     window.scrollTo(0, 0);
   }, []);
 
-  //get products from api
-  const [products,setProducts] =useState([]);
-  const {data, loading, errors} = useFetch("/api/products?populate=*");
-  useEffect(()=>{
-     data && setProducts(data)
-  },[data])
+  const [products, setProducts] = useState([]);
+  const { data, loading, errors } = useFetch('/api/products?populate=*');
+  useEffect(() => {
+    data && setProducts(data);
+  }, [data]);
 
-  //use the useParams hook to get the product id from the route
-  /* const { id } = useParams<{ id: string }>(); */
   const { id } = useParams();
-
-  // Convert the id to a number
   const productId = Number(id);
-
-  //find the product that matches the id from the array
   const product = products.find((p) => p.id === productId);
+  
 
-  //check if the product exist...
-  if (product ) {
+  
+  //dynamic product images change
+  const [mainImage, setMainImage] = useState('');
+
+  useEffect(() => {
+    if (product) {
+      setMainImage(import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url);
+    }
+  }, [product]);
+
+  const dispatch = useDispatch();
+
+  const switchMainImage = (newImage) => {
+    setMainImage(import.meta.env.VITE_API_URL + newImage);
+  };
+
+
+  // Quantity handler
+  const [quantity, setQuantity] = useState(1);
+  const increment = () => {
+    
+    if (quantity < 100) {
+      setQuantity(prevQuantity => prevQuantity + 1);
+    }
+  };
+
+  const decrement = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
+
+
+
+  //for testing in console ==========================================================================================================
+  console.log(data)
+
+  if (product) {
     return (
-      <>
-      <Navbar />
-      
-      
+      <> <Navbar />
+        
         <section className="text-gray-600 body-font overflow-hidden">
-          
-          <div className="container px-5 pt-24 pb-8 mx-auto" >
+          <div className="container px-5 pt-24 pb-8 mx-auto">
             <div className="lg:w-4/5 mx-auto flex flex-wrap">
               <div className="lg:w-1/2 w-full h-auto object-cover object-center rounded">
                 <img
-                  alt="ecommerce"
+                  alt="product image"
                   className="w-full lg:h-auto object-cover object-center rounded"
-                  src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url}
+                  src={mainImage}
                 />
-                
-                <div className=" grid grid-cols-4 gap-4 mt-4">
-                    <img src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url} alt="product2" className="w-full cursor-pointer border"/>
-                    <img src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url} alt="product2" className="w-full cursor-pointer border"/>
-                    <img src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url} alt="product2" className="w-full cursor-pointer border"/>
-                    <img src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url} alt="product2" className="w-full cursor-pointer border"/>
+                <div className="grid grid-cols-5 gap-4 mt-4">
+                  <img
+                        
+                        src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url}
+                        alt="product image"
+                        className="w-full cursor-pointer border"
+                        onClick={() =>
+                          switchMainImage(product.attributes.image.data.attributes.url)
+                        }
+                      />
+                  {product &&
+                    ['image1', 'image2', 'image3', 'image4'].map((imageAttribute, index) => (
+                      <img
+                        key={index}
+                        src={
+                          import.meta.env.VITE_API_URL +
+                          product.attributes[imageAttribute]?.data.attributes.url
+                        }
+                        alt={`product image ${index + 1}`}
+                        className="w-full cursor-pointer border rounded-sm"
+                        onClick={() =>
+                          switchMainImage(product.attributes[imageAttribute]?.data.attributes.url)
+                        }
+                      />
+                    ))}
                 </div>
               </div>
               <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -82,95 +126,126 @@ function ProductDetails() {
                     <span className="text-gray-600 ml-3">(142) Reviews</span>
                   </span>
                 </div>
-                <div className="space-y-1 mb-4">
-                  <p className="text-gray-800 font-semibold space-x-2">
-                      <span>Availability: </span>
-                      <span className="text-green-600">In Stock</span>
-                  </p>
-                  <p className="space-x-2">
-                      <span className="text-gray-800 font-semibold">Brand: </span>
-                      <span className="text-gray-600">Apex</span>
-                  </p>
-                  <p className="space-x-2">
-                      <span className="text-gray-800 font-semibold">Category: </span>
-                      <span className="text-gray-600">Sofa</span>
-                  </p>
-                  <p className="space-x-2">
-                      <span className="text-gray-800 font-semibold">SKU: </span>
-                      <span className="text-gray-600">BE45VGRT</span>
+                
+
+                
+
+                <div className='mb-4'>
+                  <p className="leading-relaxed">
+                      <span className="text-gray-800 font-semibold">Description: </span> 
+                      <span className="text-gray-600 cursor-pointer">{product.attributes.Desc}</span>
                   </p>
                 </div>
 
-                <div className="flex items-baseline mb-1 space-x-4 font-roboto mt-4">
+                <div className="space-y-1 mb-2">
+                  <p className="space-x-2">
+                      <span className="mr-3 text-gray-600">Brand : </span>
+                      <span className="text-violet-500 cursor-pointer">{product.attributes.brand}</span>
+                  </p>
+                  <p className="space-x-2">
+                      <span className="mr-3 text-gray-600">Category : </span>
+                      {product.attributes.categories.data.map((category, index) => (
+                        <span key={index} className="text-violet-500 cursor-pointer">
+                          {category.attributes.title}  {' '}
+                        </span>
+                      ))}
+                      
+
+                  </p>
+                </div>
+
+                <div className="flex items-baseline mb-1 space-x-4 font-roboto mt-6">
                   <p className="title-font font-bold text-2xl text-gray-900">${product.attributes.price}</p>
-                  {/* <p className="text-base text-gray-400 line-through">$55.00</p> */}
+                  {product.attributes.oldPrice ? <p className="max-sm:pr-1 w-fit rounded-full pr-4 my-2 font-medium  flex text-red-700 line-through">${product.attributes.oldPrice}</p> : <p>{' '}</p>}
                 </div>
 
-                <p className="leading-relaxed">
-                  {product.attributes.Desc}
-                </p>
-                <div className="mt-4">
-                  <h3 className="text-sm text-gray-800 uppercase mb-1">Quantity</h3>
-                  <div className="flex border border-gray-300 text-gray-600 divide-x divide-gray-300 w-max">
-                      <div className="h-8 w-8 text-xl flex items-center justify-center cursor-pointer select-none">-</div>
-                      <div className="h-8 w-8 text-base flex items-center justify-center">4</div>
-                      <div className="h-8 w-8 text-xl flex items-center justify-center cursor-pointer select-none">+</div>
-                  </div>
-                </div>
                 <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                   <div className="flex">
-                    <span className="mr-3">Color</span>
-                    {[...Array(3)].map((_, index) => (
-                      <button
-                        key={index}
-                        className={`border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none${
-                          index !== 0 ? ` ml-1 bg-${index === 2 ? 'purple-500' : 'gray-700'} ` : ''
-                        }`}
-                      ></button>
-                    ))}
+                    <span className="mr-3 text-gray-600">Color : </span>
+                        {product.attributes.color.data.map((color, index) => (
+                              <span key={index} className="border border-violet-500 rounded-full w-6 h-6 focus:outline-none ml-1 cursor-pointer" 
+                                    style={{ backgroundColor: color.attributes.name.toLowerCase() }} 
+                                    alt={color.attributes.name.toLowerCase()} title={color.attributes.name.toLowerCase()}>
+
+                              </span>
+                          ))}
+
                   </div>
-                  {/* <div className="flex ml-6 items-center">
-                    <span className="mr-3">Size</span>
-                    <div className="relative">
-                      <select className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-500 text-base pl-3 pr-10">
-                        <option>SM</option>
-                        <option>M</option>
-                        <option>L</option>
-                        <option>XL</option>
-                      </select>
-                      <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
-                        <svg
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          className="w-4 h-4"
-                          viewBox="0 0 24 24"
+                </div>
+            
+                <div className="mt-8 flex flex-row max-sm:flex-wrap items-center justify-between ">
+                  <div className="mb-4 lg:mb-0 lg:mr-4 ">
+                    <div className="w-28 py-2">
+                      <div className="flex flex-row w-full h-10 bg-transparent rounded-lg">
+                        <button
+                          onClick={decrement}
+                          className="w-20 h-full border border-violet-700 text-gray-900 bg-gray-100 border-r rounded-l outline-none cursor-pointer hover:bg-gray-300"
                         >
-                          <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                      </span>
+                          <span className="m-auto text-2xl font-thin">-</span>
+                        </button>
+
+                        <input
+                          type="number"
+                          className="flex items-center w-full border-y border-violet-700 font-semibold text-center text-gray-900 placeholder-gray-900 bg-gray-100 outline-none focus:outline-none text-md"
+                          min={1}
+                          max={100}
+                          value={quantity}
+                        />
+
+                        <button
+                          onClick={increment}
+                          className="w-20 h-full border border-violet-700 text-gray-900 bg-gray-100 border-l rounded-r outline-none cursor-pointer hover:bg-gray-300"
+                        >
+                          <span className="m-auto text-2xl font-thin">+</span>
+                        </button>
+                      </div>
                     </div>
-                  </div> */}
-                </div>
-                <div className="flex">
+                  </div>
+
+
+                  <div className="mb-4 lg:mb-0">
+                    <div className="py-2">
+                      <div className="flex flex-row w-full h-10 bg-transparent rounded-lg">
+                          <button
+                            onClick={() =>
+                              dispatch(addToCart({
+                                id: product.id,
+                                title: product.attributes.Title,
+                                desc: product.attributes.Desc,
+                                price: product.attributes.price,
+                                quantity: quantity, // Pass the quantity here
+                                image: product.attributes.image.data.attributes.url,
+                                categories: Array.isArray(product.attributes.categories)
+                                  ? product.attributes.categories.map(category => category.attributes.title)
+                                  : ['Default Category'],
+                              }))
+                            }
+                            className="flex ml-auto text-white bg-violet-700 border-0 py-2 px-6 focus:outline-none hover:bg-violet-900 rounded "
+                          >
+                            ADD TO CART
+                        </button>
+
+                        <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                          <svg
+                            fill="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            className="w-5 h-5"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                          </svg>
+                        </button>
+
+                        
+                      </div>
+                    </div>
+                  </div>
                   
-                  <button className="flex ml-auto text-white bg-violet-700 border-0 py-2 px-6 focus:outline-none hover:bg-violet-900 rounded">
-                    ADD TO CART
-                  </button>
-                  <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                    <svg
-                      fill="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                    </svg>
-                  </button>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -196,6 +271,7 @@ function ProductDetails() {
               </div>
 
               <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
+                <tbody>
                   <tr>
                       <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Color</th>
                       <th className="py-2 px-4 border border-gray-300 ">Blank, Brown, Red</th>
@@ -208,16 +284,15 @@ function ProductDetails() {
                       <th className="py-2 px-4 border border-gray-300 w-40 font-medium">Weight</th>
                       <th className="py-2 px-4 border border-gray-300 ">55kg</th>
                   </tr>
+                </tbody>
               </table>
+
           </div>
         </div>
-
-        
-
         <Footer />
-        </>
-    )
+      </>
+    );
   }
 }
 
-export default ProductDetails
+export default ProductDetails;

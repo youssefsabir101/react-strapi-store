@@ -28,14 +28,14 @@ function Categories({category}) {  //   <===== had {category} mazal ma3raft chno
   return (
     <>
     
-    <div className="container py-8 mx-auto ">
-    <h2 className="text-2xl font-medium text-gray-800 uppercase pl-4 mb-6">shop by category</h2>
+    <div className="container py-8 mx-auto "><span className='bg-violet-700 w-2 h-9 inline-block -mb-2'></span>
+    <h2 className="inline-block text-2xl font-medium text-gray-800 uppercase pl-4 mb-6 ">shop by category</h2>
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 px-4">
     { loading ? "Loading..." 
               : categories.map(category => (
-                  <div key={category.id} className="relative overflow-hidden group max-sm:h-40 md:h-fit sm:h-fit h-60 rounded-md">
+                  <div key={category.id} className="relative overflow-hidden group max-sm:h-40 md:h-fit sm:h-fit lg:h-60 rounded-md">
                     <img src={import.meta.env.VITE_API_URL + category.attributes.image.data.attributes.url}
-                          alt="" className=" w-full " />
+                          alt="" className="w-full max-sm:h-40 md:h-fit sm:h-fit lg:h-60" />
                     <Link to={"products"} onClick={handleFilterCategory} data-category={category.id}
                       className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl 
                       text-white font-roboto font-medium group-hover:bg-opacity-60 transition" >{category.attributes.title}</Link>

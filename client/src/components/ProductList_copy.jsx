@@ -59,7 +59,7 @@ function ProductList() {
     //dynamic title
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     useEffect(() => {
-        document.title="Decory | Products";
+        document.title="SabDecor | Products";
       },[]);
     //scroll to top 
     useEffect(() => {

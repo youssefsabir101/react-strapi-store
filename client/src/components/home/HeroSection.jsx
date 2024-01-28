@@ -16,11 +16,11 @@ function HeroSection() {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-4 text-center">
-          <a href="#" className="block w-full rounded bg-violet-500 px-12 py-3 text-sm font-medium text-white shadow hover:bg-violet-700 focus:outline-none focus:ring active:bg-violet-500 sm:w-auto">
+          <a href="#" className="block w-full rounded bg-violet-700 px-12 py-3 text-sm font-medium text-white shadow focus:outline-none focus:ring active:bg-violet-500 sm:w-auto hover:scale-105 transition-all ease-in-out duration-100">
             Get Started
           </a>
 
-          <a  href="#" className="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-violet-500 shadow hover:text-violet-700 focus:outline-none focus:ring active:text-violet-500 sm:w-auto">
+          <a  href="#" className="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-violet-700 shadow hover:text-violet-900 focus:outline-none focus:ring  sm:w-auto hover:scale-105 transition-all ease-in-out duration-100">
             Learn More
           </a>
         </div>

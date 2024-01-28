@@ -1,12 +1,12 @@
 import Navbar from "../navbar/Navbar"
 import ProductsList from "./ProductsList";
-import Footer from "../Footer";
+import Footer from "../staticPages/Footer";
 import { useState, useEffect, useContext } from "react";
 import StoreContext from '../../hooks/storeContext';
 import useFetch from '../../hooks/useFetch';
+import { FaFilter, FaSearch } from "react-icons/fa";
 
-
-import qs from "qs";
+import qs from "qs";// strapi query
 
 // filter section component 
 function FilterSidebar () {
@@ -51,8 +51,23 @@ function FilterSidebar () {
         
     } */
 
+    //range input for selecting both minimum and maximum prices 
+    
+    const [priceRange, setPriceRange] = useState([0, 100]); // Initial price range
+
+    const handleChange = (event) => {
+      const newValue = parseInt(event.target.value, 10);
+      const thumbValue = event.target.getAttribute('data-thumb');
+  
+      if (thumbValue === 'min') {
+        setPriceRange([newValue, priceRange[1]]);
+      } else {
+        setPriceRange([priceRange[0], newValue]);
+      }
+    };
+
     return(
-                <div className="w-full py-10  divide-y divide-gray-200 space-y-5">
+                <div className="w-full py-10 h-full divide-y divide-gray-200 space-y-5 ">
                     <div className="  px-4">
                         <div>
                             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
@@ -67,7 +82,7 @@ function FilterSidebar () {
                                             : categories.map(category => ( 
                                                 <div key={category.id} className="flex items-center rounded-md px-4 h-9 text-gray-600 hover:bg-violet-700 hover:text-white transition-all ease-in-out duration-200">
                                                     <input type="checkbox" onChange={handleFilters} id={category.id} data-category={category.id}
-                                                        className="text-violet-700 focus:ring-0 rounded-sm cursor-pointer" />
+                                                        className="h-5 w-5 text-violet-700 rounded border-2 border-violet-700 focus:ring-violet-700" />
                                                     <label htmlFor={category.id} className="w-full  ml-3 cursor-pointer">{category.attributes.title}</label>
                                                     {/* <div className="ml-auto text-gray-600 text-sm">16</div> */}                               
                                                 </div>
@@ -75,12 +90,12 @@ function FilterSidebar () {
                             </div>
                         </div>
     
-                        <div className="pt-4 mr-4">
+                        {/* <div className="pt-4 mr-4">
                             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                             <div className="space-y-2">
                                 all
                             </div>
-                        </div>
+                        </div> */}
     
                         <div className="pt-4">
                             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
@@ -93,7 +108,36 @@ function FilterSidebar () {
                                     className="w-full border border-violet-700 rounded  px-3 py-1 text-gray-600 shadow-sm outline-none"
                                     placeholder="max"/>
                             </div>
-                        </div>
+                        </div>{/* 
+
+                        <div className="flex items-center space-x-4">
+                            <label className="text-gray-600">{priceRange[0]}</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={priceRange[0]}
+                                data-thumb="min"
+                                onChange={handleChange}
+                                className="w-72 appearance-none h-2 rounded-full outline-none "
+                                style={{
+                                background: `linear-gradient(to right, #68D391 0%, #68D391 ${(priceRange[0] / 100) * 100}%, #CBD5E0 ${(priceRange[0] / 100) * 100}%, #CBD5E0 100%)`,
+                                }}
+                            />
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={priceRange[1]}
+                                data-thumb="max"
+                                onChange={handleChange}
+                                className="w-72 appearance-none h-2 rounded-full outline-none"
+                                style={{
+                                background: `linear-gradient(to right, #68D391 0%, #68D391 ${(priceRange[0] / 100) * 100}%, #CBD5E0 ${(priceRange[0] / 100) * 100}%, #CBD5E0 ${(priceRange[1] / 100) * 100}%, #68D391 ${(priceRange[1] / 100) * 100}%, #68D391 100%)`,
+                                }}
+                            />
+                            <label className="text-gray-600">{priceRange[1]}</label>
+                        </div> */}
     
                         <div className="pt-4">
                             <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Color</h3>
@@ -127,7 +171,7 @@ function Products() {
     //dynamic title
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     useEffect(() => {
-        document.title="Decory | Products";
+        document.title="SabDecor | Products";
       },[]);
     //start page from top 
     useEffect(() => {
@@ -149,43 +193,51 @@ function Products() {
             {/*  products content */}
             <div className="col-span-3">
                 {/* TopMenu */}
-                <div className="mx-4 grid max-sm:grid-cols-1 grid-cols-4 gap-2">
+                <div className="mx-4 grid max-sm:grid-cols-1 grid-cols-3 gap-4 py-4">
                     
-                    <div className="max-sm:w-full h-10 col-span-2">
-                            <form action="" className="flex">
-                                <input type="text"  className="w-5/6 h-10 flex items-center justify-center text-violet-700 p-4 border-2 border-violet-700 outline-none rounded-tl rounded-bl" placeholder="serch"/>
-                                <button className="w-1/6 h-10 flex items-center justify-center text-white bg-violet-700 rounded-tr rounded-br cursor-pointer">serch</button>
-                            </form>
+                    
+                    <div className="max-sm:w-full h-10 col-span-2 py-6 flex items-center justify-between">
+
+                        <form className="flex flex-1">
+                            <input
+                            type="text"
+                            className="w-full h-10 px-4 text-violet-700 border-2 border-violet-700 outline-none rounded-tl rounded-bl"
+                            placeholder="Search"
+                            />
+                            <button className="w-20 h-10 flex items-center justify-center text-white bg-violet-700 rounded-tr rounded-br cursor-pointer">
+                                <FaSearch />
+                            </button>
+                        </form>
                     </div>
-                    <div className="w-full h-10 col-span-1 ">
-                        <select name="sort" id="sort"
-                            className="w-full h-10 text-white bg-violet-700  shadow-lg rounded outline-none">
-                            <option value=""  className="">Default sorting</option>
-                            <option value="price-low-to-high" className="">Price low to high</option>
-                            <option value="price-high-to-low" className="">Price high to low</option>
-                            <option value="latest" className="">Latest product</option>
-                        </select>
-                    </div>
-                    <div className=" w-full h-10 col-span-1">
-                        <div className="flex gap-2 float-right">
-                            <div className="border w-16 h-10 flex items-center justify-center text-white bg-violet-700 rounded cursor-pointer">
-                                <span className="fa-solid fa-grip-vertical">Viwe</span>
+
+                    
+                    <div className=" w-full h-10 col-span-1 py-1">
+
+                        <div className="flex gap-2 float-right mr-3 max-sm:-mr-3">
+                            <div className="border w-fit h-10 flex items-center justify-center text-white bg-violet-700 rounded cursor-pointer">
+                                <select name="sort" id="sort"
+                                    className="w-full h-10 text-white font-normal bg-violet-700  shadow-lg rounded outline-none px-4">
+                                    <option value=""  className="">Default sorting</option>
+                                    <option value="price-low-to-high" className="">Price low to high</option>
+                                    <option value="price-high-to-low" className="">Price high to low</option>
+                                    <option value="latest" className="">Latest product</option>
+                                </select>
                             </div>
-                            <div className="lg:hidden w-16 h-10 border bg-violet-700 flex rounded cursor-pointer">
+                            <div className="lg:hidden w-16 h-10 border bg-violet-700 text-white flex items-center justify-center rounded cursor-pointer">
                                 <button
-                                    aria-label="Open Menu"
+                                    aria-label="Filter"
                                     title="Open Menu"
-                                    className="w-full px-2 transition duration-200 rounded focus:outline-none focus:shadow-outline text-center text-white"
+                                    className="w-16"
                                     onClick={() => setIsMenuOpen(true)}
                                 >
-                                    Filter
+                                  Filter  <FaFilter className="inline-block"/>
                                 </button>
                                 {isMenuOpen && (
-                                    <div className="absolute top-20 right-0  mx-2">
-                                        <div className="p-5 bg-white border rounded-lg shadow-2xl">
+                                    <div className=" top-40 right-0  mx-2 absolute z-40">
+                                        <div className="p-5 bg-white border rounded-lg shadow-2xl ">
                                             <div className="flex items-center justify-between mb-4">
                                             <div className="">
-                                                <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
+                                                <span className="ml-2 text-xl font-bold text-gray-800 uppercase">
                                                     Filter
                                                 </span>
                                             </div>
@@ -204,7 +256,9 @@ function Products() {
                                                 </svg>
                                                 </button>
                                             </div>
+                                            
                                             </div>
+                                            <FilterSidebar />
                                             {/* <div className="divide-y divide-gray-200 space-y-5">
                                                 <div>
                                                     <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
@@ -272,7 +326,7 @@ function Products() {
                                                 
     
                                             </div> */}
-                                            <FilterSidebar />
+                                            
                                         </div>
                                     </div>
                                 )}
