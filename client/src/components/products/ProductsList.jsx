@@ -7,9 +7,10 @@ import StoreContext from "../../hooks/storeContext";
 import SkeletonLoader from "./SkeletonLoader";
 import { addToCart } from "../redux/cartReducer";
 import {useDispatch} from "react-redux"
+import ReactPaginate from "react-paginate"
+import {BsChevronRight, BsChevronLeft} from "react-icons/bs"
 
-function ProductsList({category}) {
-
+function ProductsList({category,inputSearchValue}) {
     const {filter} = useContext(StoreContext)
     //get products from api
     const [products,setProducts] =useState([]);
@@ -17,15 +18,17 @@ function ProductsList({category}) {
     useEffect(()=>{
        data && setProducts(data)
     },[data])
-
-    //gret fronm category
     
+    // search =========================================================================
+   let productTump = products;
+    if(inputSearchValue.length == 0){
+        productTump = products
+    }else if(inputSearchValue.length >= 1){
+        productTump = products.filter( product =>{
+            return product.attributes.Title.toLowerCase().includes(inputSearchValue) || product.attributes.Desc.toLowerCase().includes(inputSearchValue);
+            })
+    }
     
-
-    
-    /* useEffect(()=>{
-        console.log(filter)
-      },[filter]) */
 
     // difine dispatch
     const dispatch = useDispatch();
@@ -33,13 +36,15 @@ function ProductsList({category}) {
         <>
             {/* Products card section */}
             <div className="max-sm:grid-cols-2 mt-10 grid  sm:mx-2  sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-3 lg:mx-0 xl:grid-cols-3 md:gap-0 ">
-                {loading ? <>
+
+                {   loading ? <>
                                 <SkeletonLoader />
                                 <SkeletonLoader />
                                 <SkeletonLoader />
                                 <SkeletonLoader />
                             </>
-                    :products.map((product,id) => (
+                    :
+                    productTump.map((product,id) => (
                         <div key={id} className="shadow-xl max-sm:mx-1 sm:mx-2 md:mx-1 lg:mx-2 xl:mx-4 rounded-md bg-white my-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200">
                             <Link to={`/products/${product.id}`}>
                                 {(product.attributes.isFeatured) ? <span className="relative bg-violet-700 w-16 rounded-lg rounded-tl-none rounded-br-none px-4 -mb-6 ml-auto font-semibold flex z-0 text-white">New</span> : <></> }
@@ -87,11 +92,11 @@ function ProductsList({category}) {
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
                                     ))}
-                                    <span className="text-gray-400 ml-1 font-extralight">|142 Reviews</span>
+                                    <span className="text-gray-400 ml-1 font-extralight">|67 Reviews</span>
                                 </span>
                             </div>
                             <Link to={`/products/${product.id}`} >
-                                <h2 className='max-sm:font-medium font-semibold px-4'>{product.attributes.Title}</h2>
+                                <h2 className='max-sm:font-medium font-semibold px-4 line-clamp-1'>{product.attributes.Title}</h2>
                                 <p className='max-sm:font-light text-gray-500 px-4 outline-none line-clamp-2'>{product.attributes.Desc}</p>
                             </Link>
                             
@@ -121,7 +126,30 @@ function ProductsList({category}) {
             </div>
             {/* /Products card section */}
             {/* pagination section */}
-            <section className="py-10">
+
+            {/* <ReactPaginate 
+                breakLabel={<span className="mr-4">...</span>}
+                nextLabel ={
+                    <span className="w-10 h-10 flex items-center justify-center bg-violet-700 text-white rounded-md">
+                        <BsChevronRight />
+                    </span>
+                }
+                //onChange = {handlePageClick}
+                pageRangeDisplayed={3}
+                pageCount={15}
+                previousLabel={
+                    <span className="w-10 h-10 flex items-center justify-center bg-violet-700 text-white rounded-md mr-4">
+                        <BsChevronLeft />
+                    </span>
+                }
+                containerClassName="flex items-center justify-center mt-8 mb-4"
+                pageClassName="block border bprder-solid border-violet-300 hover:bg-violet-700 hover:text-white w-10 h-10 flex items-center justify-center rounded-md mr-4"
+                activeClassName="bg-violet-700 text-white"
+            /> */}
+
+
+
+            {/* <section className="py-10">
                 <div className="container mx-auto">
                     <div className=" flex flex-wrap ">
                         <div className=" w-full px-4 items-center justify-center">
@@ -211,7 +239,8 @@ function ProductsList({category}) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
+            
         
         </>
   )

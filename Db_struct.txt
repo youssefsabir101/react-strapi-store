@@ -3,8 +3,8 @@
 +----------------+       +--------------+       +------------------+
 | id             |       | id           |       | id               |
 | Title          |       | title        |       | product_id       |
-| Desc           |       | title        |       +------------------+                       
-| category_id    |       | image        |
+| Desc           |       | image        |       +------------------+                       
+| category_id    |       |              |
 | image          |       +--------------+       
 | price          |
 | oldPrice       |

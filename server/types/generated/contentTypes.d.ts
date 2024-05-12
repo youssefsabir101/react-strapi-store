@@ -726,6 +726,11 @@ export interface ApiColorColor extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String;
+    products: Attribute.Relation<
+      'api::color.color',
+      'manyToMany',
+      'api::product.product'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -775,7 +780,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     images: Attribute.Media;
     color: Attribute.Relation<
       'api::product.product',
-      'oneToMany',
+      'manyToMany',
       'api::color.color'
     >;
     createdAt: Attribute.DateTime;

@@ -104,8 +104,9 @@
     },
     "color": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::color.color"
+      "relation": "manyToMany",
+      "target": "api::color.color",
+      "inversedBy": "products"
     }
   }
 }

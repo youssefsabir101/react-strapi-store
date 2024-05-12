@@ -58,3 +58,136 @@ margin-left: 11px;
 
 
 
+.styled-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 26px;
+  height: 24px;
+  border: 2px solid  rgb(109, 40, 219);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+.styled-checkbox:hover{
+  border: 2px solid rgb(255, 255, 255);
+
+}
+
+.styled-checkbox:checked {
+  background-color: rgb(109, 40, 219);
+  border-color: rgb(109, 40, 219);
+}
+.styled-checkbox:checked:hover {
+  background-color: rgba(255, 255, 255, 0);
+  border-color: rgb(255, 255, 255);
+}
+
+.styled-checkbox::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 24%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 17px;
+  border: solid #fff;
+  border-width: 0 3px 3px 0;
+  transform-origin: bottom left;
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+
+.styled-checkbox:checked::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.filterColor-checkbox{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+
+
+
+
+.filterColor-checkbox:checked:hover{
+  background-color: rgba(255, 255, 255, 0);
+  border-color: rgb(255, 255, 255);
+}
+
+.filterColor-checkbox::after{
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 17px;
+  border: solid #dbdadd;
+  border-width: 0 3px 3px 0;
+  transform-origin: bottom left;
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+.filterColor-checkbox-white-bg::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 17px;
+  border: solid #000000 ;
+  border-width: 0 3px 3px 0;
+  transform-origin: bottom left;
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+
+.filterColor-checkbox:checked::after{
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(45deg);
+} 

@@ -57,9 +57,6 @@ function ProductDetails() {
 
 
 
-  //for testing in console ==========================================================================================================
-  console.log(data)
-
   if (product) {
     return (
       <> <Navbar />
@@ -123,7 +120,7 @@ function ProductDetails() {
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                       </svg>
                     ))}
-                    <span className="text-gray-600 ml-3">(142) Reviews</span>
+                    <span className="text-gray-600 ml-3">(67) Reviews</span>
                   </span>
                 </div>
                 
@@ -163,11 +160,12 @@ function ProductDetails() {
                   <div className="flex">
                     <span className="mr-3 text-gray-600">Color : </span>
                         {product.attributes.color.data.map((color, index) => (
-                              <span key={index} className="border border-violet-500 rounded-full w-6 h-6 focus:outline-none ml-1 cursor-pointer" 
-                                    style={{ backgroundColor: color.attributes.name.toLowerCase() }} 
-                                    alt={color.attributes.name.toLowerCase()} title={color.attributes.name.toLowerCase()}>
-
-                              </span>
+                              
+                              <div key={index} className="flex items-center rounded-md w-6 h-6 bg-black border border-violet-200 transition-all ease-in-out duration-200"
+                              style={{ backgroundColor: color.attributes.name.toLowerCase() }} >
+                                  <input type="checkbox" id="black" data-color="2" 
+                                      className="w-16 h-6 filterColor-checkbox " alt={color.attributes.name.toLowerCase()} title={color.attributes.name.toLowerCase()} />
+                              </div>
                           ))}
 
                   </div>
@@ -251,7 +249,7 @@ function ProductDetails() {
           </div>
         </section>
 
-        <div className="container px-5 pb-24 mx-auto">
+        {/* <div className="container px-5 pb-24 mx-auto">
           <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">Product details</h3>
           <div className=" pt-6">
               <div className="text-gray-600">
@@ -288,7 +286,7 @@ function ProductDetails() {
               </table>
 
           </div>
-        </div>
+        </div> */}
         <Footer />
       </>
     );

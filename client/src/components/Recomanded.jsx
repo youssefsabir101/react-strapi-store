@@ -49,7 +49,7 @@ function Recomanded() {
                                 
                                 
                                 <div className='flex items-center ml-auto '>
-                                    <Link to={`/Wishlist`}>
+                                    <Link to={`#`}>
                                         <span className='max-sm:grid-cols-2 bg-gray-100 shadow-xl w-10 h-10 rounded-full items-center justify-center inline-flex cursor-pointer hover:border-violet-700 hover:border transition-all ease-in-out duration-500'>
                                             <svg
                                                 fill="white"
@@ -82,7 +82,7 @@ function Recomanded() {
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
                                     ))}
-                                    <span className="text-gray-400 ml-1 font-extralight">|142 Reviews</span>
+                                    <span className="text-gray-400 ml-1 font-extralight">|67 Reviews</span>
                                 </span>
                             </div>
                             <Link to={`/products/${product.id}`}>
@@ -106,8 +106,8 @@ function Recomanded() {
                     ))}
         </div>
         <div className="flex items-center justify-center mt-6 py-6">
-            <Link to="/products" className="block w-full rounded bg-violet-700 px-12 py-3 text-sm font-medium text-white shadow focus:outline-none focus:ring active:bg-violet-500 sm:w-auto hover:scale-105 transition-all ease-in-out duration-100">
-                Show More...
+            <Link to="/products" className="block w-full rounded bg-violet-700 px-12 py-3 text-sm font-medium text-white shadow focus:outline-none focus:ring active:bg-violet-500 max-sm:w-1/2 max-sm:text-center sm:w-auto hover:scale-105 transition-all ease-in-out duration-100">
+                Show More
             </Link>
         </div>
     </div>
