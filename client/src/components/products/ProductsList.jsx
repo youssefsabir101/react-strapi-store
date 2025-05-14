@@ -149,7 +149,7 @@ function ProductsList({category,inputSearchValue}) {
 
 
 
-            {/* <section className="py-10">
+            <section className="py-10">
                 <div className="container mx-auto">
                     <div className=" flex flex-wrap ">
                         <div className=" w-full px-4 items-center justify-center">
@@ -239,7 +239,7 @@ function ProductsList({category,inputSearchValue}) {
                         </div>
                     </div>
                 </div>
-            </section> */}
+            </section>
             
         
         </>
