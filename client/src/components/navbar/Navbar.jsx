@@ -111,11 +111,6 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/Wishlist" aria-label="Wishlist" title="Wishlist" className="font-medium tracking-wide text-violet-700 transition-colors duration-200 hover:text-deep-purple-accent-400">
-                <FaHeart /><div className='cart-badge'><span className=''>0</span></div>
-              </Link>
-            </li>
-            <li>
               <Link to="/cart" aria-label="Cart" title="cart" className="font-medium tracking-wide text-violet-700 transition-colors duration-200 hover:text-deep-purple-accent-400">
                 <FaShoppingCart/><div className='cart-badge'><span className=''>{products.length}</span></div>
               </Link>
