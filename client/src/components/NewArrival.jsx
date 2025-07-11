@@ -1,305 +1,294 @@
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from "react";
-import useFetch from "../hooks/useFetch";
+"use client"
 
-import StoreContext from "../hooks/storeContext";
-import { addToCart } from "./redux/cartReducer";
-import {useDispatch} from "react-redux"
-
-/* const products= [
-  {
-    id: 0,
-    name: 'VintageBag',
-    brandName: 'ZZ',
-    price: 71,
-    stat: 'New',
-    imageSrc: product8,
-    description: 'classNameic vintage leather bag with multiple compartments and adjustable strap.',
-  },
-  {
-      id: 1,
-      name: 'Earthen Bottle',
-      brandName: 'AA',
-      price: 48,
-      stat: 'New',
-      imageSrc: product1,
-      description: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
-    },
-    {
-      id: 2,
-      name: 'Nomad Tumbler',
-      brandName: 'BB',
-      price: 35,
-      stat: 'New',
-      imageSrc: product2,
-      description: 'Olive drab green insulated bottle with flared screw lid and flat top.',
-    },
-    {
-      id: 3,
-      name: 'Focus Paper Refill',
-      brandName: 'CC',
-      price: 89,
-      stat: 'New',
-      imageSrc: product3,
-      description: 'Person using a pen to cross a task off a productivity paper card.',
-    },
-    {
-      id: 4,
-      name: 'Machined Mechanical Pencil',
-      brandName: 'DD',
-      price: 35,
-      stat: 'New',
-      imageSrc: product4,
-      description: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-    },
-    {
-      id: 5,
-      name: 'Artisanal Wooden Desk',
-      brandName: 'EE',
-      price: 120,
-      stat: 'New',
-      imageSrc: product5,
-      description: 'Handcrafted wooden desk with drawers and vintage aesthetic.',
-    },
-    {
-      id: 6,
-      name: 'Leather Office Chair',
-      brandName: 'FF',
-      price: 199,
-      stat: 'New',
-      imageSrc: product6,
-      description: 'Luxurious leather office chair with ergonomic design and cushioned seat.',
-    },
-    {
-      id: 7,
-      name: 'Modern Desk Lamp',
-      brandName: 'GG',
-      price: 45,
-      stat: 'New',
-      imageSrc: product7,
-      description: 'Sleek and minimalist modern desk lamp with adjustable arm and LED lighting.',
-    },
-    {
-      id: 8,
-      name: 'Vintage Leather Bag',
-      brandName: 'HH',
-      price: 75,
-      stat: 'New',
-      imageSrc: product8,
-      description: 'classNameic vintage leather bag with multiple compartments and adjustable strap.',
-    },
-    {
-      id: 9,
-      name: 'Office Leather Chair',
-      brandName: 'II',
-      price: 189,
-      stat: 'New',
-      imageSrc: product9,
-      description: 'Luxurious leather office chair with ergonomic design and cushioned seat.',
-    },
-    {
-      id: 10,
-      name: 'Desk Lamp',
-      brandName: 'JJ',
-      price: 55,
-      stat: 'New',
-      imageSrc: product10,
-      description: 'Sleek and minimalist modern desk lamp with adjustable arm and LED lighting.',
-    },
-    {
-      id: 11,
-      name: 'Leather Vintage Bag',
-      brandName: 'KK',
-      price: 65,
-      stat: 'New',
-      imageSrc: product11,
-      description: 'classNameic vintage leather bag with multiple compartments and adjustable strap.',
-    },{
-      id: 12,
-      name: 'Earthen Bottle',
-      brandName: 'LL',
-      price: 48,
-      stat: 'New',
-      imageSrc: product1,
-      description: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
-    },
-    {
-      id: 13,
-      name: 'Nomad Tumbler',
-      brandName: 'MM',
-      price: 35,
-      stat: 'New',
-      imageSrc: product2,
-      description: 'Olive drab green insulated bottle with flared screw lid and flat top.',
-    },
-    {
-      id: 14,
-      name: 'Focus Paper Refill',
-      brandName: 'NN',
-      price: 89,
-      stat: 'New',
-      imageSrc: product3,
-      description: 'Person using a pen to cross a task off a productivity paper card.',
-    },
-    {
-      id: 15,
-      name: 'Machined Mechanical Pencil',
-      brandName: 'OO',
-      price:35,
-      stat: 'New',
-      imageSrc: product4,
-      description: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
-    },
-    {
-      id: 16,
-      name: 'Artisanal Wooden Desk',
-      brandName: 'PP',
-      price: 120,
-      stat: 'New',
-      imageSrc: product5,
-      description: 'Handcrafted wooden desk with drawers and vintage aesthetic.',
-    },
-    {
-      id: 17,
-      name: 'Leather Office Chair',
-      brandName: 'QQ',
-      price: 199,
-      stat: 'New',
-      imageSrc: product6,
-      description: 'Luxurious leather office chair with ergonomic design and cushioned seat.',
-    },
-]; */
+import Carousel from "react-multi-carousel"
+import "react-multi-carousel/lib/styles.css"
+import { Link } from "react-router-dom"
+import { useState, useEffect, useContext } from "react"
+import useFetch from "../hooks/useFetch"
+import StoreContext from "../hooks/storeContext"
+import ProductCard from "./ProductCard"
 
 function NewArrival() {
-    const responsive = {
-        superLargeDesktop: {
-          // the naming can be any, depends on you.
-          breakpoint: { max: 4000, min: 3000 },
-          items: 5
-        },
-        desktop: {
-          breakpoint: { max: 3000, min: 1280 },
-          items: 4
-        },
-        tablet2: {
-          breakpoint: { max: 1024, min: 860 },
-          items: 3
-        },
-        tablet1: {
-          breakpoint: { max:860, min: 640 },
-          items: 2
-        },
-        mobile: {
-          breakpoint: { max: 640, min: 0 },
-          items: 2
-        }
-      };
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+      slidesToSlide: 2,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1280 },
+      items: 4,
+      slidesToSlide: 2,
+    },
+    tablet2: {
+      breakpoint: { max: 1280, min: 1024 },
+      items: 3,
+      slidesToSlide: 1,
+    },
+    tablet1: {
+      breakpoint: { max: 1024, min: 640 },
+      items: 2,
+      slidesToSlide: 1,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+      slidesToSlide: 1,
+    },
+  }
 
-    const {filter} = useContext(StoreContext)
-    //get products from api
-    const [products,setProducts] =useState([]);
-    const {data, loading, errors} = useFetch(filter);
-    useEffect(()=>{
-       data && setProducts(data)
-    },[data])
+  const { filter } = useContext(StoreContext)
 
-    //gret fronm category
+  // Get products from API
+  const [products, setProducts] = useState([])
+  const { data, loading, errors } = useFetch(filter)
 
-    
-    /* useEffect(()=>{
-        console.log(filter)
-      },[filter]) */
+  useEffect(() => {
+    data && setProducts(data)
+  }, [data])
 
-    // difine dispatch
-    const dispatch = useDispatch();
+  // Filter featured products
+  const featuredProducts = products.filter((product) => product.attributes.isFeatured)
 
-      
+  // Custom arrow components
+  const CustomLeftArrow = ({ onClick }) => (
+    <button
+      onClick={onClick}
+      className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-xl border border-violet-100 flex items-center justify-center hover:bg-violet-50 hover:border-violet-300 transition-all duration-200 group"
+      aria-label="Previous products"
+    >
+      <svg
+        className="w-6 h-6 text-violet-600 group-hover:text-violet-700"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  )
+
+  const CustomRightArrow = ({ onClick }) => (
+    <button
+      onClick={onClick}
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-xl border border-violet-100 flex items-center justify-center hover:bg-violet-50 hover:border-violet-300 transition-all duration-200 group"
+      aria-label="Next products"
+    >
+      <svg
+        className="w-6 h-6 text-violet-600 group-hover:text-violet-700"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  )
+
+  if (loading) {
+    return (
+      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="text-center mb-12">
+              <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+            </div>
+            <div className="flex space-x-6 overflow-hidden">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="flex-shrink-0 w-80">
+                  <div className="bg-gray-200 rounded-2xl h-96"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (errors) {
+    return (
+      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-8 text-center">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Error Loading New Arrivals</h3>
+            <p className="text-red-600">Unable to load new arrival products. Please try again later.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (featuredProducts.length === 0) {
+    return (
+      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-12 text-center">
+            <div className="w-24 h-24 bg-gradient-to-r from-violet-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-12 h-12 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">New Arrivals Coming Soon!</h3>
+            <p className="text-gray-600 mb-6">
+              We're preparing exciting new products for you. Check back soon for the latest arrivals!
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            >
+              Browse Current Collection
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className='lg:container mx-auto  py-16 sm:px-6 sm:py-24   '>
-      <span className='bg-violet-700 w-2 h-9 inline-block -mb-2'></span>
-      <h2 className="inline-block text-2xl font-medium text-gray-800 uppercase pl-4 mb-6">Top New Arrival</h2>
-            <Carousel responsive={responsive}
-                      additionalTransfrom={0}
-                      arrows
-                      autoPlay
-                      autoPlaySpeed={2000}
-                      centerMode={false}
-                      className="py-4"
-                      containerClass="container-with-dots"
-                      dotListClass=" "
-                      draggable
-                      focusOnSelect={false}
-                      infinite
-                      itemClass=""
-                      keyBoardControl
-                      minimumTouchDrag={80}
-                      pauseOnHover
-                      renderArrowsWhenDisabled={false}
-                      renderButtonGroupOutside={false}
-                      renderDotsOutside={false}
-                    >
+    <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-16">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-8 h-8 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div className="w-16 h-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full mx-4"></div>
+            <span className="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold">
+              NEW
+            </span>
+            <div className="w-16 h-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full mx-4"></div>
+            <div className="w-8 h-8 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent mb-4">
+            Top New Arrivals
+          </h2>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+            Discover our latest collection of premium furniture pieces, fresh from our designers and ready to transform
+            your space.
+          </p>
+        </div>
 
-                {products.map((product,id) => (
-                (product.attributes.isFeatured) && 
-                        <div key={id} className="shadow-xl max-sm:mx-1 sm:mx-2 md:mx-1 lg:mx-2 xl:mx-4 rounded-md bg-white my-2 cursor-pointer hover:scale-105 transition-all ease-in-out duration-200">
-                            <Link to={`/products/${product.id}`}>
-                                {(product.attributes.isFeatured) ? <span className="relative bg-violet-700 w-16 rounded-lg rounded-tl-none rounded-br-none px-4 -mb-6 ml-auto font-semibold flex text-white">New</span> : <></> }
-                                
-                                <img className="max-sm:h-40 h-64 w-full rounded-md object-cover" src={import.meta.env.VITE_API_URL + product.attributes.image.data.attributes.url} alt="product image" />
-                            </Link>
-                            <div className='flex m-2 mb-0'>
-                                <p className="max-sm:px-2 bg-violet-700 w-fit rounded-full px-4 m-2 font-bold flex text-white">${product.attributes.price}</p>
-                                {product.attributes.oldPrice ? <p className="max-sm:pr-1 w-fit rounded-full pr-4 my-2 font-medium  flex text-red-700 line-through">${product.attributes.oldPrice}</p> : <p>{' '}</p>}
-                                
-                                
-                            </div>
-                            <div className="flex mx-4 my-0">
-                                <span className="flex items-center">
-                                    {[...Array(4)].map((_, index) => (
-                                    <svg
-                                        key={index}
-                                        fill="currentColor"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        className="w-3 h-3 text-violet-700"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    ))}
-                                    <span className="text-gray-400 ml-1 font-extralight">|67 Reviews</span>
-                                </span>
-                            </div>
-                            <Link to={`/products/${product.id}`}>
-                                <h2 className='max-sm:font-medium font-semibold px-4'>{product.attributes.Title}</h2>
-                                <p className='max-sm:font-light text-gray-500 px-4 line-clamp-2'>{product.attributes.Desc}</p>
-                            </Link>
-                            
-                            <div className='mx-4'>
-                                <button onClick={()=>dispatch(addToCart({
-                                    id: product.id,
-                                    title: product.attributes.Title,
-                                    desc: product.attributes.Desc,
-                                    price: product.attributes.price,
-                                    image: product.attributes.image.data.attributes.url,
-
-                                }))} 
-                                className='shadow-md bg-violet-700 rounded-md py-2 mb-4 w-full text-white hover:scale-105 transition-all ease-in-out duration-100'>Add to Cart</button>
-                            </div>
-                            
-                        </div>
-
-                        
-                    ))}
-
+        {/* Carousel Container */}
+        <div className="relative">
+          <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 overflow-hidden">
+            <Carousel
+              responsive={responsive}
+              additionalTransfrom={0}
+              arrows={true}
+              autoPlay={true}
+              autoPlaySpeed={3000}
+              centerMode={false}
+              className="py-4"
+              containerClass="carousel-container"
+              dotListClass="custom-dot-list"
+              draggable={true}
+              focusOnSelect={false}
+              infinite={true}
+              itemClass="px-3"
+              keyBoardControl={true}
+              minimumTouchDrag={80}
+              pauseOnHover={true}
+              renderArrowsWhenDisabled={false}
+              renderButtonGroupOutside={false}
+              renderDotsOutside={true}
+              showDots={true}
+              customLeftArrow={<CustomLeftArrow />}
+              customRightArrow={<CustomRightArrow />}
+            >
+              {featuredProducts.map((product) => (
+                <div key={product.id} className="h-full">
+                  <ProductCard product={product} className="h-full" />
+                </div>
+              ))}
             </Carousel>
+          </div>
+        </div>
 
-        
+        {/* Bottom Call to Action */}
+        <div className="text-center mt-12">
+          <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-8 max-w-md mx-auto">
+            <div className="mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Don't Miss Out!</h3>
+              <p className="text-gray-600">Be the first to discover all our new arrivals and exclusive collections.</p>
+            </div>
+            <Link
+              to="/products?filter=new"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              View All New Arrivals
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Custom Carousel Styles */}
+      <style jsx global>{`
+        .carousel-container .react-multi-carousel-dot-list {
+          position: static;
+          margin-top: 2rem;
+        }
+
+        .carousel-container .react-multi-carousel-dot button {
+          width: 12px;
+          height: 12px;
+          border: none;
+          background: #e5e7eb;
+          border-radius: 50%;
+          margin: 0 4px;
+          transition: all 0.3s ease;
+        }
+
+        .carousel-container .react-multi-carousel-dot--active button {
+          background: linear-gradient(135deg, #7c3aed, #a855f7);
+          transform: scale(1.2);
+        }
+
+        .carousel-container .react-multi-carousel-track {
+          padding: 1rem 0;
+        }
+
+        .carousel-container .react-multi-carousel-item {
+          display: flex;
+          align-items: stretch;
+        }
+      `}</style>
     </div>
   )
 }

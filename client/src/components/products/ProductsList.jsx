@@ -1,15 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
-
-
 import StoreContext from "../../hooks/storeContext";
 import SkeletonLoader from "./SkeletonLoader";
 import { addToCart } from "../redux/cartReducer";
 import {useDispatch} from "react-redux"
 import ReactPaginate from "react-paginate"
 import {BsChevronRight, BsChevronLeft} from "react-icons/bs"
-
 function ProductsList({category,inputSearchValue}) {
     const {filter} = useContext(StoreContext)
     //get products from api
@@ -18,7 +15,6 @@ function ProductsList({category,inputSearchValue}) {
     useEffect(()=>{
        data && setProducts(data)
     },[data])
-    
     // search =========================================================================
    let productTump = products;
     if(inputSearchValue.length == 0){
@@ -28,8 +24,6 @@ function ProductsList({category,inputSearchValue}) {
             return product.attributes.Title.toLowerCase().includes(inputSearchValue) || product.attributes.Desc.toLowerCase().includes(inputSearchValue);
             })
     }
-    
-
     // difine dispatch
     const dispatch = useDispatch();
   return (
@@ -54,7 +48,6 @@ function ProductsList({category,inputSearchValue}) {
                             <div className='flex m-2 mb-0'>
                                 <p className="max-sm:px-2 bg-violet-700 w-fit rounded-full px-4 m-2 font-bold flex text-white">${product.attributes.price}</p>
                                 {product.attributes.oldPrice ? <p className="max-sm:pr-1 w-fit rounded-full pr-4 my-2 font-medium  flex text-red-700 line-through">${product.attributes.oldPrice}</p> : <p>{' '}</p>}
-                                
                                 
                             </div>
                             <div className="flex mx-4 my-0">
@@ -91,45 +84,13 @@ function ProductsList({category,inputSearchValue}) {
                                     categories: Array.isArray(product.attributes.categories)
                                     ? product.attributes.categories.map(category => category.attributes.title)
                                     : ['Default Category'],
-
-
                                 }))} 
-
-                                
                                 className='shadow-md bg-violet-700 rounded-md py-2 mb-4 w-full text-white hover:scale-105 transition-all ease-in-out duration-100'>Add to Cart</button>
                             </div>
                             
                         </div>
                     ))}
-
-                
-                
             </div>
-            {/* /Products card section */}
-            {/* pagination section */}
-
-            {/* <ReactPaginate 
-                breakLabel={<span className="mr-4">...</span>}
-                nextLabel ={
-                    <span className="w-10 h-10 flex items-center justify-center bg-violet-700 text-white rounded-md">
-                        <BsChevronRight />
-                    </span>
-                }
-                //onChange = {handlePageClick}
-                pageRangeDisplayed={3}
-                pageCount={15}
-                previousLabel={
-                    <span className="w-10 h-10 flex items-center justify-center bg-violet-700 text-white rounded-md mr-4">
-                        <BsChevronLeft />
-                    </span>
-                }
-                containerClassName="flex items-center justify-center mt-8 mb-4"
-                pageClassName="block border bprder-solid border-violet-300 hover:bg-violet-700 hover:text-white w-10 h-10 flex items-center justify-center rounded-md mr-4"
-                activeClassName="bg-violet-700 text-white"
-            /> */}
-
-
-
             <section className="py-10">
                 <div className="container mx-auto">
                     <div className=" flex flex-wrap ">
@@ -221,10 +182,7 @@ function ProductsList({category,inputSearchValue}) {
                     </div>
                 </div>
             </section>
-            
-        
         </>
   )
 }
-
 export default ProductsList
