@@ -12,6 +12,7 @@ import ContactUs from './components/staticPages/ContactUs';
 import About from './components/staticPages/About';
 import Account from './components/account/Account';
 import Checkout from './components/cart/Checkout';
+import PageNotFound from './components/staticPages/PageNotFound';
 
 function App() {
   const [filter, setFilter] = useState("/api/products?populate=*")
@@ -37,6 +38,7 @@ function App() {
           <Route path="/Wishlist" element ={<Wishlist />}/>
           <Route path="/account" element ={<Account />}/>
           <Route path="/checkout" element ={<Checkout />}/>
+          <Route path="/PageNotFound" element ={<PageNotFound />}/>
         </Routes>
       </BrowserRouter>
     </StoreContext.Provider>
