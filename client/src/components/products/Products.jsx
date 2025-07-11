@@ -1,338 +1,343 @@
+"use client"
 import Navbar from "../navbar/Navbar"
-import ProductsList from "./ProductsList";
-import Footer from "../staticPages/Footer";
-import { useState, useEffect, useContext } from "react";
-import StoreContext from '../../hooks/storeContext';
-import useFetch from '../../hooks/useFetch';
-import { FaFilter, FaSearch } from "react-icons/fa";
+import ProductsList from "./ProductsList"
+import Footer from "../staticPages/Footer"
+import { useState, useEffect, useContext } from "react"
+import StoreContext from "../../hooks/storeContext"
+import useFetch from "../../hooks/useFetch"
+import { FaFilter, FaSearch, FaTimes } from "react-icons/fa"
+import qs from "qs"
+import Slider from "rc-slider"
+import "rc-slider/assets/index.css"
 
-import qs from "qs";// strapi query
+// Filter Sidebar Component
+function FilterSidebar() {
+  // Get data from API
+  const [categories, setCategories] = useState([])
+  const { data, loading } = useFetch("/api/categories?populate=*")
 
-
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-
-// filter section component 
-function FilterSidebar () {
-    //get data from api
-    const [categories,setCategories] =useState([]);
-    const {data, loading} = useFetch("/api/categories?populate=*");
-
-    useEffect(()=>{
+  useEffect(() => {
     data && setCategories(data)
-    },[data])
+  }, [data])
 
-    //get -,-,- from Store
-    const {setFilter, selectedCategories, setSelectCategories} = useContext(StoreContext)
+  // Get context from Store
+  const { setFilter, selectedCategories, setSelectCategories } = useContext(StoreContext)
 
-    // filter : multi cetrgories ----------------------------  
-    useEffect(() => {
-        const query = qs.stringify({  //using strapi query 
-            filters: {
-                categories: {
-                    id: {
-                        $in: selectedCategories
-                    }
-                }
-            }
-        });
-        setFilter(import.meta.env.VITE_API_URL+"/api/products?populate=*&"+query)
-    },[selectedCategories])
+  // Filter: multi categories
+  useEffect(() => {
+    const query = qs.stringify({
+      filters: {
+        categories: {
+          id: {
+            $in: selectedCategories,
+          },
+        },
+      },
+    })
+    setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query)
+  }, [selectedCategories])
 
-    //handle filter categories function
-    const handleFilters = (e) =>{
-        const selectedID = e.target.dataset.category
-        const isChecked = e.target.checked
-        setSelectCategories(selectedCategories => {
-           if(isChecked) return [...selectedCategories,selectedID]
-           return selectedCategories.filter(id => id !== selectedID)
-        })   
+  // Handle filter categories function
+  const handleFilters = (e) => {
+    const selectedID = e.target.dataset.category
+    const isChecked = e.target.checked
+    setSelectCategories((selectedCategories) => {
+      if (isChecked) return [...selectedCategories, selectedID]
+      return selectedCategories.filter((id) => id !== selectedID)
+    })
+  }
+
+  // Min-max pricing handle
+  const [minValue, setMinValue] = useState(0)
+  const [maxValue, setMaxValue] = useState(1000)
+
+  const handleMinChange = (e) => {
+    const value = Number.parseInt(e.target.value)
+    if (value <= maxValue) {
+      setMinValue(value)
     }
+  }
 
+  const handleMaxChange = (e) => {
+    const value = Number.parseInt(e.target.value)
+    if (value >= minValue) {
+      setMaxValue(value)
+    }
+  }
 
-    //min-max pricing handle
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(1000);
+  const handleSliderChange = ([min, max]) => {
+    if (min <= max) {
+      setMinValue(min)
+      setMaxValue(max)
+    }
+  }
 
-    const handleMinChange = (e) => {
-        const value = parseInt(e.target.value);
-        if (value <= maxValue) {
-        setMinValue(value);
-        }
-    };
+  // State to store selected colors
+  const [selectedColors, setSelectedColors] = useState([])
 
-    const handleMaxChange = (e) => {
-        const value = parseInt(e.target.value);
-        if (value >= minValue) {
-        setMaxValue(value);
-        }
-    };
+  // Function to handle color filter changes
+  const handleColorFilters = (e) => {
+    const selectedColor = e.target.dataset.color
+    const isChecked = e.target.checked
 
-    const handleSliderChange = ([min, max]) => {
-        // Ensure min value is not greater than max value
-        if (min <= max) {
-        setMinValue(min);
-        setMaxValue(max);
-        }
-    };
+    setSelectedColors((prevSelectedColors) => {
+      if (isChecked) {
+        return [...prevSelectedColors, selectedColor]
+      } else {
+        return prevSelectedColors.filter((color) => color !== selectedColor)
+      }
+    })
+  }
 
+  useEffect(() => {
+    const query = qs.stringify({
+      filters: {
+        categories: {
+          id: {
+            $in: selectedCategories,
+          },
+        },
+        price: {
+          $gte: minValue,
+          $lte: maxValue,
+        },
+        color: {
+          id: {
+            $in: selectedColors,
+          },
+        },
+      },
+    })
+    setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query)
+  }, [selectedCategories, minValue, maxValue, selectedColors])
 
+  const colors = [
+    { id: "2", name: "Black", bg: "bg-black" },
+    { id: "1", name: "White", bg: "bg-white border-2" },
+    { id: "3", name: "Gray", bg: "bg-gray-600" },
+    { id: "4", name: "Blue", bg: "bg-blue-600" },
+    { id: "5", name: "Purple", bg: "bg-violet-600" },
+  ]
 
+  return (
+    <div className="bg-white rounded-2xl shadow-xl border border-violet-100 overflow-hidden">
+      <div className="p-6 space-y-8">
+        {/* Categories Filter */}
+        <div>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent mb-6">
+            Categories
+          </h3>
+          <div className="space-y-3">
+            {loading ? (
+              <div className="space-y-2">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="h-4 bg-violet-100 rounded animate-pulse"></div>
+                ))}
+              </div>
+            ) : (
+              categories.map((category) => (
+                <label
+                  key={category.id}
+                  className="flex items-center px-3 py-2 rounded-xl hover:bg-violet-50 transition-all duration-200 cursor-pointer group"
+                >
+                  <input
+                    type="checkbox"
+                    onChange={handleFilters}
+                    data-category={category.id}
+                    className="w-5 h-5 text-violet-600 bg-white border-2 border-violet-300 rounded focus:ring-violet-500 focus:ring-2 accent-violet-600"
+                  />
+                  <span className="ml-3 text-gray-700 group-hover:text-violet-700 font-medium">
+                    {category.attributes.title}
+                  </span>
+                </label>
+              ))
+            )}
+          </div>
+        </div>
 
+        {/* Price Filter */}
+        <div>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent mb-6">
+            Price Range
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <input
+                type="number"
+                value={minValue}
+                onChange={handleMinChange}
+                className="w-20 px-3 py-2 border-2 border-violet-200 rounded-xl focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none transition-all text-sm"
+                placeholder="Min"
+                min={0}
+              />
+              <span className="text-violet-400 font-bold">—</span>
+              <input
+                type="number"
+                value={maxValue}
+                onChange={handleMaxChange}
+                className="w-20 px-3 py-2 border-2 border-violet-200 rounded-xl focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none transition-all text-sm"
+                placeholder="Max"
+                min={0}
+              />
+            </div>
+            <div className="px-2">
+              <Slider
+                min={0}
+                max={1000}
+                range
+                value={[minValue, maxValue]}
+                onChange={handleSliderChange}
+                trackStyle={[{ backgroundColor: "#8b5cf6", height: 6 }]}
+                railStyle={{ backgroundColor: "#e5e7eb", height: 6 }}
+                handleStyle={[
+                  {
+                    backgroundColor: "#ffffff",
+                    border: "3px solid #8b5cf6",
+                    width: 20,
+                    height: 20,
+                    boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
+                  },
+                  {
+                    backgroundColor: "#ffffff",
+                    border: "3px solid #8b5cf6",
+                    width: 20,
+                    height: 20,
+                    boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
+                  },
+                ]}
+              />
+            </div>
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>${minValue}</span>
+              <span>${maxValue}</span>
+            </div>
+          </div>
+        </div>
 
-
-    // State to store selected colors
-    const [selectedColors, setSelectedColors] = useState([]);
-
-    // Function to handle color filter changes
-    const handleColorFilters = (e) => {
-        const selectedColor = e.target.dataset.color; // Get the color value from dataset
-        const isChecked = e.target.checked;
-    
-        setSelectedColors(prevSelectedColors => {
-            if (isChecked) {
-                // Add the selected color to the state if checked
-                return [...prevSelectedColors, selectedColor];
-            } else {
-                // Remove the selected color from the state if unchecked
-                return prevSelectedColors.filter(color => color !== selectedColor);
-            }
-        });
-    };
-
-    
-
-     useEffect(() => {
-        const query = qs.stringify({
-            filters: {
-                categories: {
-                    id: {
-                        $in: selectedCategories
-                    }
-                },
-                price: {
-                    $gte: minValue,
-                    $lte: maxValue
-                },
-                color: { // Include selected colors in the query
-                    id: {
-                        $in: selectedColors
-                    }
-                }
-            }
-        });
-        setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query);
-    }, [selectedCategories, minValue, maxValue, selectedColors]);
-
-
-    return(
-                <div className="w-full py-10 h-full divide-y divide-gray-200 space-y-5 ">
-                    <div className="  px-4">
-                        <div>
-                            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Categories</h3>
-                            <div className="space-y-1">
-                                {loading ? "Loading..."
-                                            : categories.map(category => ( 
-                                                <div key={category.id} className="flex items-center rounded-md px-4 h-9 text-gray-600 hover:bg-violet-700 hover:text-white transition-all ease-in-out duration-200">
-                                                    <input type="checkbox" onChange={handleFilters} id={category.id} data-category={category.id}
-                                                        className="styled-checkbox" />
-                                                    <label htmlFor={category.id} className="w-full  ml-3 cursor-pointer">{category.attributes.title}</label>
-                                                </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="pt-4">
-                            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
-                            <div className="mt-4 flex items-center">
-                                <input type="number" name="min" id="min-price"
-                                    className="w-full border-2 border-violet-700 rounded px-3 py-1 text-gray-600 shadow-sm outline-none"
-                                    placeholder="min price"
-                                    min={0}
-                                    value={minValue}
-                                    onChange={handleMinChange}/>
-                                <span className="mx-3 text-gray-500">-</span>
-                                <input type="number" name="max" id="max-price"
-                                    className="w-full border-2 border-violet-700 rounded  px-3 py-1 text-gray-600 shadow-sm outline-none"
-                                    min={0}
-                                    placeholder="max price"
-                                    value={maxValue }
-                                    onChange={handleMaxChange}/>
-                            </div>
-                            <Slider
-                                min={0}
-                                max={1000}
-                                range
-                                value={[minValue, maxValue]}
-                                onChange={handleSliderChange}
-                                className="mt-6"
-                                trackStyle={[{ backgroundColor: '#8b5cf6' }]} // Change track color
-                                railStyle={{ backgroundColor: '#c4b5fd' }} // Change rail color
-                                handleStyle={[
-                                    { backgroundColor: '#ffffff', border: '2px solid #805ad5', WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)', outline: 'none', boxShadow: 'none', opacity: 1 },
-                                    { backgroundColor: '#ffffff', border: '2px solid #805ad5', WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)', outline: 'none', boxShadow: 'none', opacity: 1 },
-                                  ]}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">Colors</h3>
-                            <div className="flex items-center gap-2">
-                                <div className="flex items-center rounded-md w-6 h-6 bg-black border border-violet-200 transition-all ease-in-out duration-200">
-                                    <input type="checkbox" id="black" data-color="2" onChange={handleColorFilters} 
-                                        className="w-16 h-6 filterColor-checkbox " />
-                                </div>
-                                <div className="flex items-center rounded-md w-6 h-6 bg-white border border-violet-200 transition-all ease-in-out duration-200">
-                                    <input type="checkbox" id="white" data-color="1" onChange={handleColorFilters} 
-                                        className="w-16 h-6 filterColor-checkbox filterColor-checkbox-white-bg" />
-                                </div>
-                                <div className="flex items-center rounded-md w-6 h-6 bg-gray-600 border border-violet-200 transition-all ease-in-out duration-200">
-                                    <input type="checkbox" id="gray" data-color="3" onChange={handleColorFilters} 
-                                        className="w-16 h-6 filterColor-checkbox" />
-                                </div>
-                                <div className="flex items-center rounded-md w-6 h-6 bg-blue-600 border border-violet-200 transition-all ease-in-out duration-200">
-                                    <input type="checkbox" id="blue" data-color="4" onChange={handleColorFilters} 
-                                        className="w-16 h-6 filterColor-checkbox" />
-                                </div>
-                                <div className="flex items-center rounded-md w-6 h-6 bg-violet-600 border border-violet-200 transition-all ease-in-out duration-200">
-                                    <input type="checkbox" id="indigo" data-color="5" onChange={handleColorFilters} 
-                                        className="w-16 h-6 filterColor-checkbox" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        {/* Colors Filter */}
+        <div>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent mb-6">
+            Colors
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {colors.map((color) => (
+              <label key={color.id} className="relative cursor-pointer group">
+                <input type="checkbox" data-color={color.id} onChange={handleColorFilters} className="sr-only peer" />
+                <div
+                  className={`w-10 h-10 rounded-full ${color.bg} border-2 border-violet-200 group-hover:border-violet-400 peer-checked:border-violet-600 peer-checked:ring-2 peer-checked:ring-violet-300 transition-all duration-200 group-hover:scale-110 relative overflow-hidden`}
+                >
+                  <div className="absolute inset-0 bg-violet-600 opacity-0 group-hover:opacity-20 transition-opacity duration-200"></div>
                 </div>
-    )
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-violet-600 rounded-full opacity-0 peer-checked:opacity-100 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                  <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
-// ./end filter section component
 
 function Products() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [searchInput, setSearchInput] = useState("")
 
-    //dynamic title
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    useEffect(() => {
-        document.title="SabDecor | Products";
-    },[]);
+  useEffect(() => {
+    document.title = "SabDecor | Products"
+    window.scrollTo(0, 0)
+  }, [])
 
-    //start page from top 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+  const handleSearch = (e) => {
+    e.preventDefault()
+    const searchVal = document.querySelector("#search-input").value.toLowerCase()
+    setSearchInput(searchVal)
+  }
 
-    // search form handle
-    const [searchInput,setSearchInput] = useState(" ");
-    const handleSearche = (e) => {
-        e.preventDefault();
-        const searchVal = document.querySelector('#search-input').value.toLowerCase();
-        setSearchInput (searchVal);
-
-    }
-
-    return (
-        <>
-        <Navbar />
+  return (
+    <>
+      <Navbar />
+      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 min-h-screen pt-10">
+        <div className="max-w-7xl mx-auto px-4 py-8">
           
-        <div className="lg:container mx-auto md:w-full pt-20 grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2  ">
-            {/* sidebar */}
-            <div className=" col-span-1 w-full pb-6 shadow-2xl rounded overflow-hiddenb hidden lg:block bg-white h-fit">
-                {/* filter */}
-                <FilterSidebar />
-                
-            </div>
-            {/* ./sidebar */}
-    
-            {/*  products content */}
-            <div className="col-span-3">
-                {/* TopMenu */}
-                <div className="mx-4 grid max-sm:grid-cols-1 grid-cols-3 gap-4 py-4">
-                    <div className="max-sm:w-full h-10 col-span-2 py-6 flex items-center justify-between">
-                        <form className="flex flex-1">
-                            <input
-                            type="text"
-                            className="w-full h-10 px-4 text-violet-700 border-2 border-violet-700 outline-none rounded-tl rounded-bl"
-                            placeholder="Search"
-                            id="search-input"
-                            />
-                            <button className="w-20 h-10 flex items-center justify-center text-white bg-violet-700 rounded-tr rounded-br cursor-pointer"
-                                    onClick={handleSearche}>
-                                <FaSearch />
-                            </button>
-                        </form>
-                    </div>
-                    <div className=" w-full h-10 col-span-1 py-1">
-                        <div className="flex gap-2 float-right mr-3 max-sm:-mr-3">
-                            {/* <div className="border w-fit h-10 flex items-center justify-center text-white bg-violet-700 rounded cursor-pointer">
-                                <select name="sort" id="sort"
-                                    className="w-full h-10 text-white font-normal bg-violet-700  shadow-lg rounded outline-none px-4">
-                                    <option value=""  className="">Default sorting</option>
-                                    <option value="price-low-to-high" className="">Price low to high</option>
-                                    <option value="price-high-to-low" className="">Price high to low</option>
-                                    <option value="latest" className="">Latest product</option>
-                                </select>
-                            </div> */}
-                            <div className="lg:hidden w-16 h-10 border bg-violet-700 text-white flex items-center justify-center rounded cursor-pointer">
-                                <button
-                                    aria-label="Filter"
-                                    title="Open Menu"
-                                    className="w-16"
-                                    onClick={() => setIsMenuOpen(true)}
-                                >
-                                  Filter  <FaFilter className="inline-block"/>
-                                </button>
-                                {isMenuOpen && (
-                                    <div className=" top-40 right-0  mx-2 absolute z-40">
-                                        <div className="p-5 bg-white border rounded-lg shadow-2xl ">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <div className="">
-                                                    <span className="ml-2 text-xl font-bold text-gray-800 uppercase">
-                                                        Filter
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <button
-                                                    aria-label="Close Menu"
-                                                    title="Close Menu"
-                                                    className="p-2 -mt-2 -mr-2 transition duration-200 rounded hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                                                    onClick={() => setIsMenuOpen(false)}
-                                                    >
-                                                    <svg className="w-5 text-violet-700" viewBox="0 0 24 24">
-                                                        <path
-                                                        fill="currentColor"
-                                                        d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z"
-                                                        />
-                                                    </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
 
-                                            <FilterSidebar />
-                                            
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+          <div className="grid lg:grid-cols-4 gap-8">
+            {/* Desktop Sidebar */}
+            <div className="hidden lg:block">
+              <FilterSidebar />
+            </div>
+
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              {/* Search and Filter Bar */}
+              <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 mb-8">
+                <div className="flex flex-col md:flex-row gap-4 items-center">
+                  {/* Search */}
+                  <form onSubmit={handleSearch} className="flex-1 flex">
+                    <input
+                      type="text"
+                      id="search-input"
+                      className="flex-1 px-6 py-3 border-2 border-violet-200 rounded-l-xl focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none transition-all"
+                      placeholder="Search products..."
+                    />
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-r-xl hover:from-violet-700 hover:to-purple-700 transition-all duration-200 flex items-center"
+                    >
+                      <FaSearch className="w-5 h-5" />
+                    </button>
+                  </form>
+
+                  {/* Mobile Filter Button */}
+                  <button
+                    onClick={() => setIsMenuOpen(true)}
+                    className="lg:hidden px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl hover:from-violet-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2"
+                  >
+                    <FaFilter />
+                    <span>Filters</span>
+                  </button>
                 </div>
-                {/* ./TopMenu */}
+              </div>
 
-                {/* Products List */}
-                <ProductsList inputSearchValue = {searchInput}/>
-    
-                
+              {/* Products List */}
+              <ProductsList inputSearchValue={searchInput} />
             </div>
-            {/* ./products content */}
+          </div>
+
+          {/* Mobile Filter Modal */}
+          {isMenuOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+              <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)}></div>
+              <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl overflow-y-auto">
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent">
+                      Filters
+                    </h2>
+                    <button
+                      onClick={() => setIsMenuOpen(false)}
+                      className="p-2 hover:bg-violet-100 rounded-xl transition-colors"
+                    >
+                      <FaTimes className="w-5 h-5 text-violet-600" />
+                    </button>
+                  </div>
+                  <FilterSidebar />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-    
-        <Footer />
-        </>
-      )
+      </div>
+      <Footer />
+    </>
+  )
 }
 
 export default Products
-
-
-
-
-
-
-
-

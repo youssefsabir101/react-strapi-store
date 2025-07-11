@@ -1,24 +1,44 @@
-import React from 'react'
+"use client"
 
 function SkeletonLoader() {
   return (
-    <div className="shadow-xl max-sm:mx-1 sm:mx-2 md:mx-1 lg:mx-2 xl:mx-4 rounded-md bg-white my-2 animate-pulse">
-        <div className="max-sm:h-40 h-64 w-full rounded-md object-cover bg-violet-200" ></div>
-        <div className='flex m-2'>
-            <div className="max-sm:px2 bg-violet-200 w-16 rounded-full px-4 m-2 flex"></div>
-            <div className='flex items-center ml-auto '>
-                <a href="">
-                    <div className='max-sm:grid-cols-2 bg-violet-200 shadow-xl w-10 h-10 rounded-full items-center justify-center inline-flex cursor-pointer hover:border-violet-700 hover:border transition-all ease-in-out duration-500'></div>
-                </a>
-            </div>
+    <div className="bg-white rounded-2xl shadow-xl border border-violet-100 overflow-hidden animate-pulse">
+      {/* Image Skeleton */}
+      <div className="h-48 md:h-64 bg-gradient-to-r from-violet-100 to-purple-100"></div>
+
+      <div className="p-6">
+        {/* Price Section Skeleton */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <div className="h-8 w-16 bg-violet-200 rounded-lg"></div>
+            <div className="h-6 w-12 bg-red-200 rounded-lg"></div>
+          </div>
+          <div className="h-6 w-20 bg-green-200 rounded-full"></div>
         </div>
-        <div className='mx-4'>
-            <div className='h-4 shadow-md bg-violet-200 rounded-md py-2 mb-4 w-full'></div>
-            <div className='h-4 shadow-md bg-violet-200 rounded-md py-2 mb-4 w-full'></div>
+
+        {/* Rating Skeleton */}
+        <div className="flex items-center mb-4">
+          <div className="flex space-x-1">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="w-4 h-4 bg-yellow-200 rounded"></div>
+            ))}
+          </div>
+          <div className="h-4 w-24 bg-gray-200 rounded ml-2"></div>
         </div>
-        <div className='mx-4'>
-            <div className='h-10 shadow-md bg-violet-200 rounded-md py-2 mb-4 w-full'></div>
+
+        {/* Title and Description Skeleton */}
+        <div className="mb-4">
+          <div className="h-6 bg-gray-200 rounded mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded mb-1"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
         </div>
+
+        {/* Buttons Skeleton */}
+        <div className="flex space-x-2">
+          <div className="flex-1 h-12 bg-gradient-to-r from-violet-200 to-purple-200 rounded-xl"></div>
+          <div className="h-12 w-12 bg-violet-200 rounded-xl"></div>
+        </div>
+      </div>
     </div>
   )
 }
