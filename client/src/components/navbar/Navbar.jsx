@@ -50,7 +50,7 @@ const Navbar = () => {
                   key={link.to}
                   to={link.to}
                   aria-label={link.ariaLabel}
-                  className="relative font-medium text-gray-700 hover:text-violet-700 transition-colors duration-300 group"
+                  className="relative font-medium text-violet-700 hover:text-violet-700 transition-colors duration-300 group"
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
@@ -60,19 +60,10 @@ const Navbar = () => {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              {/* Search Button */}
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-gray-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl transition-all duration-300"
-                aria-label="Search"
-              >
-                <FaSearch className="w-5 h-5" />
-              </button>
-
               {/* Cart */}
               <Link
                 to="/cart"
-                className="p-2 text-gray-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl transition-all duration-300 relative"
+                className="p-2 text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded-xl transition-all duration-300 relative"
                 aria-label="Shopping Cart"
               >
                 <FaShoppingCart className="w-5 h-5" />
@@ -86,7 +77,7 @@ const Navbar = () => {
               {/* Account */}
               <Link
                 to="/account"
-                className="p-2 text-gray-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl transition-all duration-300"
+                className="p-2 text-violet-700 hover:text-violet-900 hover:bg-violet-50 rounded-xl transition-all duration-300"
                 aria-label="Account"
               >
                 <FaUserAlt className="w-5 h-5" />
@@ -116,35 +107,12 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-
-          {/* Search Bar (Desktop) */}
-          {isSearchOpen && (
-            <div className="hidden md:block py-4 border-t border-violet-100">
-              <div className="relative max-w-md mx-auto">
-                <input
-                  type="text"
-                  placeholder="Search furniture..."
-                  className="w-full pl-12 pr-4 py-3 border-2 border-violet-200 rounded-xl focus:ring-4 focus:ring-violet-100 focus:border-violet-500 transition-all"
-                />
-                <FaSearch className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-violet-100 shadow-lg">
             <div className="px-4 py-6 space-y-6">
-              {/* Mobile Search */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search furniture..."
-                  className="w-full pl-12 pr-4 py-3 border-2 border-violet-200 rounded-xl focus:ring-4 focus:ring-violet-100 focus:border-violet-500 transition-all"
-                />
-                <FaSearch className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
-              </div>
 
               {/* Mobile Navigation Links */}
               <nav className="space-y-4">
@@ -163,14 +131,6 @@ const Navbar = () => {
 
               {/* Mobile Action Buttons */}
               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-violet-100">
-                <Link
-                  to="/wishlist"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center space-x-2 py-3 px-4 bg-violet-50 text-violet-700 rounded-xl font-medium hover:bg-violet-100 transition-all duration-300"
-                >
-                  <FaHeart className="w-4 h-4" />
-                  <span>Wishlist</span>
-                </Link>
 
                 <Link
                   to="/cart"
@@ -198,7 +158,7 @@ const Navbar = () => {
                 <Link
                   to="/products"
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-purple-700 transition-all duration-300"
+                  className="col-span-2 flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold hover:from-violet-700 hover:to-purple-700 transition-all duration-300"
                 >
                   <span>Shop Now</span>
                 </Link>
@@ -212,7 +172,7 @@ const Navbar = () => {
                     📞 Call Us
                   </a>
                   <a
-                    href="mailto:support@sabdecor.com"
+                    href="mailto:sabircode.me@gmail.com"
                     className="text-violet-600 hover:text-violet-700 font-medium text-sm"
                   >
                     ✉️ Email
