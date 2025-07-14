@@ -11,7 +11,7 @@ import Slider from "rc-slider"
 import "rc-slider/assets/index.css"
 
 // Filter Sidebar Component
-function FilterSidebar() {
+function FilterSidebar({ searchInput }) {
   // Get data from API
   const [categories, setCategories] = useState([])
   const { data, loading } = useFetch("/api/categories?populate=*")
@@ -31,11 +31,19 @@ function FilterSidebar() {
 
   // Handle filter categories function
   const handleFilters = (e) => {
-    const selectedID = e.target.dataset.category
+    // Convert selectedID to a number to match category.id type
+    const selectedID = Number.parseInt(e.target.dataset.category)
     const isChecked = e.target.checked
-    setSelectCategories((selectedCategories) => {
-      if (isChecked) return [...selectedCategories, selectedID]
-      return selectedCategories.filter((id) => id !== selectedID)
+    setSelectCategories((prevSelectedCategories) => {
+      if (isChecked) {
+        // Add only if not already present
+        if (!prevSelectedCategories.includes(selectedID)) {
+          return [...prevSelectedCategories, selectedID]
+        }
+        return prevSelectedCategories
+      } else {
+        return prevSelectedCategories.filter((id) => id !== selectedID)
+      }
     })
   }
 
@@ -73,27 +81,37 @@ function FilterSidebar() {
 
   // Consolidated useEffect for all filters and scroll to top
   useEffect(() => {
-    const query = qs.stringify({
-      filters: {
-        categories: {
-          id: {
-            $in: selectedCategories,
-          },
-        },
-        price: {
-          $gte: minValue,
-          $lte: maxValue,
-        },
-        color: {
-          id: {
-            $in: selectedColors,
-          },
+    const filters = {
+      price: {
+        $gte: minValue,
+        $lte: maxValue,
+      },
+      color: {
+        id: {
+          $in: selectedColors,
         },
       },
-    })
-    setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query)
+    }
+
+    // Conditionally add categories filter only if selectedCategories is not empty
+    if (selectedCategories.length > 0) {
+      filters.categories = {
+        id: {
+          $in: selectedCategories,
+        },
+      }
+    }
+
+    // Add search filter only if searchInput is not empty
+    if (searchInput) {
+      filters.Title = { $containsi: searchInput } // Assuming 'Title' is the field to search
+    }
+
+    // Use qs.stringify to build the entire query string, including populate
+    const query = qs.stringify({ filters, populate: "*" })
+    setFilter(import.meta.env.VITE_API_URL + "/api/products?" + query) // Removed redundant populate=*&
     window.scrollTo(0, 0) // Scroll to top after filter changes
-  }, [selectedCategories, minValue, maxValue, selectedColors, setFilter]) // Added setFilter to dependencies
+  }, [selectedCategories, minValue, maxValue, selectedColors, searchInput, setFilter])
 
   const colors = [
     { id: "2", name: "Black", bg: "bg-black" },
@@ -128,6 +146,8 @@ function FilterSidebar() {
                     type="checkbox"
                     onChange={handleFilters}
                     data-category={category.id}
+                    // Check if the category is currently selected (after ensuring selectedID is a number)
+                    checked={selectedCategories.includes(Number.parseInt(category.id))}
                     className="w-5 h-5 text-violet-600 bg-white border-2 border-violet-300 rounded focus:ring-violet-500 focus:ring-2 accent-violet-600"
                   />
                   <span className="ml-3 text-gray-700 group-hover:text-violet-700 font-medium">
@@ -239,11 +259,15 @@ function Products() {
     window.scrollTo(0, 0)
   }, [])
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    const searchVal = document.querySelector("#search-input").value.toLowerCase()
+  // Handle search input change (triggers on every keystroke)
+  const handleSearchInputChange = (e) => {
+    const searchVal = e.target.value.toLowerCase()
     setSearchInput(searchVal)
-    window.scrollTo(0, 0) // Scroll to top after search
+  }
+
+  // Handle form submission (optional, but keeps the search button functional)
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
   }
 
   return (
@@ -254,7 +278,7 @@ function Products() {
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Desktop Sidebar */}
             <div className="hidden lg:block sticky top-24 self-start">
-              <FilterSidebar />
+              <FilterSidebar searchInput={searchInput} />
             </div>
             {/* Main Content */}
             <div className="lg:col-span-3">
@@ -262,10 +286,12 @@ function Products() {
               <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 mb-8 sticky top-24 z-10">
                 <div className="flex flex-col md:flex-row gap-4 items-center">
                   {/* Search */}
-                  <form onSubmit={handleSearch} className="flex-1 flex">
+                  <form onSubmit={handleSearchSubmit} className="flex-1 flex">
                     <input
                       type="text"
                       id="search-input"
+                      value={searchInput} // Bind input value to state
+                      onChange={handleSearchInputChange} // Update state on change
                       className="flex-1 px-6 py-3 border-2 border-violet-200 rounded-l-xl focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none transition-all"
                       placeholder="Search products..."
                     />
@@ -307,7 +333,7 @@ function Products() {
                       <FaTimes className="w-5 h-5 text-violet-600" />
                     </button>
                   </div>
-                  <FilterSidebar />
+                  <FilterSidebar searchInput={searchInput} />
                 </div>
               </div>
             </div>
