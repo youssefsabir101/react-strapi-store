@@ -15,7 +15,6 @@ function FilterSidebar() {
   // Get data from API
   const [categories, setCategories] = useState([])
   const { data, loading } = useFetch("/api/categories?populate=*")
-
   useEffect(() => {
     data && setCategories(data)
   }, [data])
@@ -23,19 +22,12 @@ function FilterSidebar() {
   // Get context from Store
   const { setFilter, selectedCategories, setSelectCategories } = useContext(StoreContext)
 
-  // Filter: multi categories
-  useEffect(() => {
-    const query = qs.stringify({
-      filters: {
-        categories: {
-          id: {
-            $in: selectedCategories,
-          },
-        },
-      },
-    })
-    setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query)
-  }, [selectedCategories])
+  // Min-max pricing handle
+  const [minValue, setMinValue] = useState(0)
+  const [maxValue, setMaxValue] = useState(1000)
+
+  // State to store selected colors
+  const [selectedColors, setSelectedColors] = useState([])
 
   // Handle filter categories function
   const handleFilters = (e) => {
@@ -47,24 +39,18 @@ function FilterSidebar() {
     })
   }
 
-  // Min-max pricing handle
-  const [minValue, setMinValue] = useState(0)
-  const [maxValue, setMaxValue] = useState(1000)
-
   const handleMinChange = (e) => {
     const value = Number.parseInt(e.target.value)
     if (value <= maxValue) {
       setMinValue(value)
     }
   }
-
   const handleMaxChange = (e) => {
     const value = Number.parseInt(e.target.value)
     if (value >= minValue) {
       setMaxValue(value)
     }
   }
-
   const handleSliderChange = ([min, max]) => {
     if (min <= max) {
       setMinValue(min)
@@ -72,14 +58,10 @@ function FilterSidebar() {
     }
   }
 
-  // State to store selected colors
-  const [selectedColors, setSelectedColors] = useState([])
-
   // Function to handle color filter changes
   const handleColorFilters = (e) => {
     const selectedColor = e.target.dataset.color
     const isChecked = e.target.checked
-
     setSelectedColors((prevSelectedColors) => {
       if (isChecked) {
         return [...prevSelectedColors, selectedColor]
@@ -89,6 +71,7 @@ function FilterSidebar() {
     })
   }
 
+  // Consolidated useEffect for all filters and scroll to top
   useEffect(() => {
     const query = qs.stringify({
       filters: {
@@ -109,7 +92,8 @@ function FilterSidebar() {
       },
     })
     setFilter(import.meta.env.VITE_API_URL + "/api/products?populate=*&" + query)
-  }, [selectedCategories, minValue, maxValue, selectedColors])
+    window.scrollTo(0, 0) // Scroll to top after filter changes
+  }, [selectedCategories, minValue, maxValue, selectedColors, setFilter]) // Added setFilter to dependencies
 
   const colors = [
     { id: "2", name: "Black", bg: "bg-black" },
@@ -259,25 +243,23 @@ function Products() {
     e.preventDefault()
     const searchVal = document.querySelector("#search-input").value.toLowerCase()
     setSearchInput(searchVal)
+    window.scrollTo(0, 0) // Scroll to top after search
   }
 
   return (
     <>
       <Navbar />
-      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 min-h-screen pt-10">
+      <div className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          
-
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Desktop Sidebar */}
-            <div className="hidden lg:block">
+            <div className="hidden lg:block sticky top-24 self-start">
               <FilterSidebar />
             </div>
-
             {/* Main Content */}
             <div className="lg:col-span-3">
               {/* Search and Filter Bar */}
-              <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 mb-8">
+              <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 mb-8 sticky top-24 z-10">
                 <div className="flex flex-col md:flex-row gap-4 items-center">
                   {/* Search */}
                   <form onSubmit={handleSearch} className="flex-1 flex">
@@ -294,7 +276,6 @@ function Products() {
                       <FaSearch className="w-5 h-5" />
                     </button>
                   </form>
-
                   {/* Mobile Filter Button */}
                   <button
                     onClick={() => setIsMenuOpen(true)}
@@ -305,12 +286,10 @@ function Products() {
                   </button>
                 </div>
               </div>
-
               {/* Products List */}
               <ProductsList inputSearchValue={searchInput} />
             </div>
           </div>
-
           {/* Mobile Filter Modal */}
           {isMenuOpen && (
             <div className="fixed inset-0 z-50 lg:hidden">
