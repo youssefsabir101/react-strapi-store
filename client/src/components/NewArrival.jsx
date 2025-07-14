@@ -194,13 +194,13 @@ function NewArrival() {
 
         {/* Carousel Container */}
         <div className="relative">
-          <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-6 overflow-hidden">
+          <div className="">
             <Carousel
               responsive={responsive}
               additionalTransfrom={0}
-              arrows={true}
+              arrows={false}
               autoPlay={true}
-              autoPlaySpeed={3000}
+              autoPlaySpeed={2000}
               centerMode={false}
               className="py-4"
               containerClass="carousel-container"
@@ -214,8 +214,8 @@ function NewArrival() {
               pauseOnHover={true}
               renderArrowsWhenDisabled={false}
               renderButtonGroupOutside={false}
-              renderDotsOutside={true}
-              showDots={true}
+              renderDotsOutside={false}
+              showDots={false}
               customLeftArrow={<CustomLeftArrow />}
               customRightArrow={<CustomRightArrow />}
             >
@@ -229,25 +229,15 @@ function NewArrival() {
         </div>
 
         {/* Bottom Call to Action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-4">
           <div className="bg-white rounded-2xl shadow-xl border border-violet-100 p-8 max-w-md mx-auto">
             <div className="mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Don't Miss Out!</h3>
               <p className="text-gray-600">Be the first to discover all our new arrivals and exclusive collections.</p>
             </div>
             <Link
               to="/products?filter=new"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-200 shadow-lg"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white font-semibold rounded-xl hover:from-violet-600 hover:to-violet-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
