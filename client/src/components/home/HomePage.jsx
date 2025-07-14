@@ -9,7 +9,10 @@ import { Link } from "react-router-dom"
 import NewArrival from "../NewArrival"
 import { FaHeadset, FaTruckMoving, FaHandHoldingUsd } from "react-icons/fa"
 import ads from "../../assets/offer.png"
+import ads1 from "../../assets/background3.png"
 import Recomanded from "../Recomanded"
+
+import { Star, Award, HeartHandshake } from "lucide-react" // Import Lucide icons for new CTAs
 
 function HomePage() {
   useEffect(() => {
@@ -91,86 +94,76 @@ function HomePage() {
       <Categories category={category} />
       <NewArrival />
 
-      {/* ads */}
-      <div className="container pb-16 mx-auto">
-        <Link to="/products">
-          <img src={ads || "/placeholder.svg"} alt="ads" className="w-full border border-violet-700 rounded-md" />
-        </Link>
+      
+     <section className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-violet-100">
+          <img
+            src={ads1}
+            alt="Happy Customers Banner"
+            className="w-full h-64 md:h-96 object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-violet-900/50 to-purple-900/50 flex flex-col items-center justify-center text-center p-8">
+            <div className="flex items-center justify-center mb-4">
+              <Star className="w-8 h-8 text-yellow-400 fill-yellow-400 mr-2" />
+              <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">Trusted by Thousands</h2>
+              <Star className="w-8 h-8 text-yellow-400 fill-yellow-400 ml-2" />
+            </div>
+            <p className="text-violet-100 text-lg md:text-xl max-w-2xl mb-8">
+              Ready to transform your space? Explore our exquisite collections and find the perfect pieces for your
+              home.
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex items-center px-8 py-4 bg-white text-violet-700 font-semibold rounded-2xl hover:bg-violet-50 transform hover:scale-105 transition-all duration-200 shadow-lg group"
+            >
+              <span>Discover Your Dream Furniture</span>
+              <svg
+                className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
       </div>
-      {/* /ads */}
+    </section>
 
       <Recomanded />
 
-      {/* Modern Testimonial/CTA Section */}
-      <section className="bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50 py-16">
+      
+
+     
+      <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-3xl overflow-hidden shadow-2xl">
-            <div className="grid lg:grid-cols-2 items-center">
-              {/* Content */}
-              <div className="p-8 lg:p-16 text-white">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-1 bg-white/30 rounded-full"></div>
-                  <div className="w-3 h-3 bg-white rounded-full mx-4"></div>
-                  <div className="w-12 h-1 bg-white/30 rounded-full"></div>
-                </div>
-                <h2 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
-                  Latest Premium
-                  <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    Collection
-                  </span>
-                </h2>
-                <p className="text-violet-100 text-lg mb-8 leading-relaxed max-w-md">
-                  Discover our newest arrivals featuring premium quality furniture that combines modern design with
-                  exceptional comfort and durability.
-                </p>
-                <Link
-                  to="/products"
-                  className="inline-flex items-center px-8 py-4 bg-white text-violet-700 font-semibold rounded-2xl hover:bg-violet-50 transform hover:scale-105 transition-all duration-200 shadow-lg group"
-                >
-                  <span>Explore Collection</span>
-                  <svg
-                    className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-              </div>
-              {/* Visual Element */}
-              <div className="relative h-64 lg:h-full min-h-[400px] bg-gradient-to-br from-violet-500 to-purple-700">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="grid grid-cols-2 gap-4 transform rotate-12">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 flex items-center justify-center"
-                      >
-                        <svg className="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
-                          />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 21l4-4 4 4" />
-                        </svg>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="absolute top-8 right-8 w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center animate-pulse">
-                  <span className="text-violet-800 font-bold text-sm">NEW</span>
-                </div>
-              </div>
+          <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-3xl shadow-xl border border-violet-100 p-8 md:p-12 text-center">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-16 h-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full"></div>
+              <Award className="w-8 h-8 text-violet-600 mx-4" />
+              <div className="w-16 h-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full"></div>
             </div>
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-purple-700 bg-clip-text text-transparent mb-4">
+              Our Community Speaks Volumes
+            </h2>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8">
+              Discover why thousands of customers trust SabDecor for their home furnishing needs.
+            </p>
+            <Link
+              to="/"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-violet-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg group"
+            >
+              <HeartHandshake className="w-5 h-5 mr-2" />
+              <span>See Customer Reviews</span>
+            </Link>
           </div>
         </div>
       </section>
+      
 
-      {/* Modern Stats Section */}
+      
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Header */}
@@ -227,6 +220,8 @@ function HomePage() {
               </div>
             ))}
           </div>
+
+          
           {/* Trust Indicators */}
           <div className="mt-16 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8">
             <div className="text-center">
@@ -248,6 +243,7 @@ function HomePage() {
           </div>
         </div>
       </section>
+
       <Footer />
     </>
   )
