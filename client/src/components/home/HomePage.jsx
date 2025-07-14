@@ -1,4 +1,5 @@
 "use client"
+
 import Categories from "../categories/Categories"
 import HeroSection from "./HeroSection"
 import Navbar from "../navbar/Navbar"
@@ -21,38 +22,71 @@ function HomePage() {
 
   const category = "" // declaration variable
 
+  const features = [
+    {
+      icon: <FaTruckMoving className="w-8 h-8" />,
+      title: "Free Shipping",
+      description: "Order over $200",
+      gradient: "from-blue-500 to-indigo-600",
+      bgGradient: "from-blue-50 to-indigo-50",
+    },
+    {
+      icon: <FaHandHoldingUsd className="w-8 h-8" />,
+      title: "Money Returns",
+      description: "30 days money returns",
+      gradient: "from-green-500 to-emerald-600",
+      bgGradient: "from-green-50 to-emerald-50",
+    },
+    {
+      icon: <FaHeadset className="w-8 h-8" />,
+      title: "24/7 Support",
+      description: "Customer support",
+      gradient: "from-violet-500 to-purple-600",
+      bgGradient: "from-violet-50 to-purple-50",
+    },
+  ]
+
   return (
     <>
       <Navbar />
       <HeroSection />
 
-      {/* features */}
-      <div className="container mx-auto py-8">
-        <div className="w-10/12 grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto justify-center relative -mt-16">
-          <div className="shadow-md cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 bg-white rounded-xl px-3 py-6 flex justify-center items-center gap-6">
-            <FaTruckMoving className="w-10 h-10 text-violet-700 object-contain" />
-            <div>
-              <h4 className="font-medium capitalize text-lg">Free Shipping</h4>
-              <p className="text-gray-500 text-sm">Order over $200</p>
-            </div>
-          </div>
-          <div className="shadow-md cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 bg-white rounded-xl px-3 py-6 flex justify-center items-center gap-6">
-            <FaHandHoldingUsd className="w-10 h-10 text-violet-700 object-contain" />
-            <div>
-              <h4 className="font-medium capitalize text-lg">Money Returns</h4>
-              <p className="text-gray-500 text-sm">30 days money returns</p>
-            </div>
-          </div>
-          <div className="shadow-md cursor-pointer hover:scale-105 transition-all ease-in-out duration-200 bg-white rounded-xl px-3 py-6 flex justify-center items-center gap-6">
-            <FaHeadset className="w-10 h-10 text-violet-700 object-contain" />
-            <div>
-              <h4 className="font-medium capitalize text-lg">24/7 Support</h4>
-              <p className="text-gray-500 text-sm">Customer support</p>
-            </div>
+      {/* Modern Features Section */}
+      <div className="relative -mt-20 z-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className={`group relative bg-gradient-to-br ${feature.bgGradient} rounded-2xl p-8 shadow-xl border border-white/50 backdrop-blur-sm hover:shadow-2xl transform hover:scale-105 transition-all duration-300`}
+              >
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=20 height=20 viewBox=0 0 20 20 xmlns=http://www.w3.org/2000/svg%3E%3Cg fill=%23ffffff fillOpacity=0.1%3E%3Ccircle cx=10 cy=10 r=1/%3E%3C/g%3E%3C/svg%3E')] rounded-2xl"></div>
+
+                <div className="relative z-10 flex items-center space-x-6">
+                  {/* Icon */}
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    {feature.icon}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-violet-700 transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 font-medium">{feature.description}</p>
+                  </div>
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-violet-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      {/* /features */}
 
       <Categories category={category} />
       <NewArrival />
@@ -79,19 +113,16 @@ function HomePage() {
                   <div className="w-3 h-3 bg-white rounded-full mx-4"></div>
                   <div className="w-12 h-1 bg-white/30 rounded-full"></div>
                 </div>
-
                 <h2 className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
                   Latest Premium
                   <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                     Collection
                   </span>
                 </h2>
-
                 <p className="text-violet-100 text-lg mb-8 leading-relaxed max-w-md">
                   Discover our newest arrivals featuring premium quality furniture that combines modern design with
                   exceptional comfort and durability.
                 </p>
-
                 <Link
                   to="/products"
                   className="inline-flex items-center px-8 py-4 bg-white text-violet-700 font-semibold rounded-2xl hover:bg-violet-50 transform hover:scale-105 transition-all duration-200 shadow-lg group"
@@ -107,7 +138,6 @@ function HomePage() {
                   </svg>
                 </Link>
               </div>
-
               {/* Visual Element */}
               <div className="relative h-64 lg:h-full min-h-[400px] bg-gradient-to-br from-violet-500 to-purple-700">
                 <div className="absolute inset-0 bg-black/20"></div>
@@ -158,7 +188,6 @@ function HomePage() {
               collection.
             </p>
           </div>
-
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -198,7 +227,6 @@ function HomePage() {
               </div>
             ))}
           </div>
-
           {/* Trust Indicators */}
           <div className="mt-16 bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-8">
             <div className="text-center">
@@ -220,7 +248,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </>
   )
