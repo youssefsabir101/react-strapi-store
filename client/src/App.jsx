@@ -4,7 +4,6 @@ import ProductDetails from './components/ProductDetails'
 import Cart from './components/cart/Cart'
 import { BrowserRouter,Routes, Route } from 'react-router-dom';
 import HomePage from './components/home/HomePage'
-import Wishlist from './components/wishlist/Wishlist';
 import StoreContext from './hooks/storeContext';
 import { useEffect, useState } from 'react';
 import Faq from './components/staticPages/Faq';
@@ -17,12 +16,6 @@ import PageNotFound from './components/staticPages/PageNotFound';
 function App() {
   const [filter, setFilter] = useState("/api/products?populate=*")
   const [selectedCategories,setSelectCategories] = useState([]);
-  /* useEffect(()=>{
-    console.log(filter)
-  },[filter]) */
-
-  
-
   return (
     <>
     <StoreContext.Provider value={{filter, setFilter, selectedCategories, setSelectCategories}}>
@@ -35,7 +28,6 @@ function App() {
           <Route path="/faq" element ={<Faq />}/>
           <Route path="/cart" element ={<Cart />}/>
           <Route path="/products/:id" element ={<ProductDetails />}/>
-          <Route path="/Wishlist" element ={<Wishlist />}/>
           <Route path="/account" element ={<Account />}/>
           <Route path="/checkout" element ={<Checkout />}/>
           <Route path="/PageNotFound" element ={<PageNotFound />}/>
