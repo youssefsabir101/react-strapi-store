@@ -14,6 +14,7 @@ import Checkout from './components/cart/Checkout';
 import PageNotFound from './components/staticPages/PageNotFound';
 import BackToTopButton from './components/back-to-top-button'
 import WhatsAppButton from "./components/whatsapp-button"
+import ChatbotButton from "./components/chatbot-button"
 
 function App() {
   const [filter, setFilter] = useState("/api/products?populate=*")
@@ -37,6 +38,7 @@ function App() {
       </BrowserRouter>
       <BackToTopButton />
       <WhatsAppButton />
+      <ChatbotButton />
     </StoreContext.Provider>
     </>
   )
