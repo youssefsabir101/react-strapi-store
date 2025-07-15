@@ -1,6 +1,7 @@
 # 🛋️ SabDecor – Home Furniture E-Commerce Platform
 
-![Image](https://github.com/user-attachments/assets/68e778d8-57c5-43b2-b2a2-157ea9eff9fb)
+<img width="1920" height="3400" alt="Image" src="https://github.com/user-attachments/assets/0157081d-2a4c-43df-9f92-cd5d7bb9bfca" />
+<img width="1920" height="4149" alt="Image" src="https://github.com/user-attachments/assets/6e1581b6-5af0-4545-a36b-bf144dd648ad" />
 
 **SabDecor** is a modern, full-stack e-commerce web application designed for home furniture and decor retailers. Built with **React.js** on the frontend and **Strapi CMS** on the backend, SabDecor provides a powerful admin dashboard for content management and a fast, user-friendly interface for shoppers.
 
