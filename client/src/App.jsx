@@ -13,6 +13,7 @@ import Account from './components/account/Account';
 import Checkout from './components/cart/Checkout';
 import PageNotFound from './components/staticPages/PageNotFound';
 import BackToTopButton from './components/back-to-top-button'
+import WhatsAppButton from "./components/whatsapp-button"
 
 function App() {
   const [filter, setFilter] = useState("/api/products?populate=*")
@@ -35,6 +36,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <BackToTopButton />
+      <WhatsAppButton />
     </StoreContext.Provider>
     </>
   )
